@@ -1,0 +1,6 @@
+title "nginx"
+
+field "自动化" favor
+
+field "官网" favor args `官网`
+
