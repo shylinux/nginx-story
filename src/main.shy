@@ -1,11 +1,9 @@
 title "20200108-nginx_story"
 
-field "自动化" favor 
+refer "官网" `
+官网 https://nginx.org
+文档 https://nginx.org/en/docs/
+源码 https://github.com/nginx/nginx
+`
+source server/server.shy
 
-field "启动流程" favor args "启动流程"
-field "请求响应" favor args "请求响应"
-field "服务集群" favor args "服务集群"
-
-field "数据结构" favor args "数据结构"
-field "系统架构" favor args "系统架构"
-field "编译原理" favor args "编译原理"
