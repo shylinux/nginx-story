@@ -77,6 +77,14 @@ var Index = &ice.Context{Name: "nginx", Help: "nginx",
 				p := kit.Format("var/daemon/%s", m.Option("port"))
 				m.Cmdy(cli.SYSTEM, "bin/nginx", "-p", kit.Path(p), "-s", "stop")
 			}},
+			gdb.RELOAD: {Name: "reload", Help: "重载", Hand: func(m *ice.Message, arg ...string) {
+				p := kit.Format("var/daemon/%s", m.Option("port"))
+				m.Cmdy(cli.SYSTEM, "bin/nginx", "-p", kit.Path(p), "-s", "reload")
+			}},
+			gdb.RESTART: {Name: "restart", Help: "重启", Hand: func(m *ice.Message, arg ...string) {
+				p := kit.Format("var/daemon/%s", m.Option("port"))
+				m.Cmdy(cli.SYSTEM, "bin/nginx", "-p", kit.Path(p), "-s", "restart")
+			}},
 		}, Hand: func(m *ice.Message, c *ice.Context, cmd string, arg ...string) {
 			m.Split(m.Cmdx(cli.SYSTEM, "sh", "-c", "ps aux|grep nginx|grep -v grep"),
 				"USER PID CPU MEM VSZ RSS TTY STAT START TIME COMMAND", " ", "\n")
@@ -94,7 +102,7 @@ var Index = &ice.Context{Name: "nginx", Help: "nginx",
 				m.Push("web", kit.Format("http://%s:%s", u.Hostname(), "80"))
 			})
 			m.Appendv(ice.MSG_APPEND, "USER", "PID", "STAT", "START", "port", "web", "COMMAND")
-			m.PushAction("停止")
+			m.PushAction("重载", "重启", "停止")
 		}},
 	},
 }

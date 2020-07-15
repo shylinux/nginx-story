@@ -2,3 +2,5 @@ chapter "server"
 
 field "服务器" web.code.nginx.server
 
+field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_hash.h ]`
+
