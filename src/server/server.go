@@ -27,7 +27,7 @@ const (
 var Index = &ice.Context{Name: "nginx", Help: "nginx",
 	Configs: map[string]*ice.Config{
 		SERVER: {Name: SERVER, Help: "服务器", Value: kit.Data(
-			"source", "http://nginx.org/download/nginx-1.8.1.tar.gz",
+			"source", "https://nginx.org/download/nginx-1.8.1.tar.gz",
 		)},
 	},
 	Commands: map[string]*ice.Command{
