@@ -1,6 +1,30 @@
 chapter "server"
 
-field "服务器" web.code.nginx.server
+section "下载"
+refer `
+下载 https://nginx.org/download/nginx-1.8.1.tar.gz
+`
 
+section "解压编译"
+spark shell `
+tar xvf nginx-1.8.1.tar.gz
+cd nginx-1.8.1
+./configure
+make
+make install
+`
+
+section "启动服务"
+spark shell `
+nginx
+`
+
+section "连接服务"
+spark shell `
+curl localhost
+`
+
+section "体验"
+field "服务器" web.code.nginx.server
 field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_hash.h ]`
 

@@ -11,11 +11,37 @@ import (
 	"github.com/shylinux/icebergs/core/code"
 	kit "github.com/shylinux/toolkits"
 
+	"bufio"
+	"bytes"
+	"io/ioutil"
 	"os"
 	"path"
 	"runtime"
 	"strings"
 )
+
+func _nginx_port(m *ice.Message, p string) {
+	f, e := os.Open(path.Join(p, "conf/nginx.conf"))
+	m.Assert(e)
+	defer f.Close()
+
+	b, e := ioutil.ReadAll(f)
+	m.Assert(e)
+	bio := bufio.NewScanner(bytes.NewBuffer(b))
+
+	o, _, e := kit.Create(path.Join(p, "conf/nginx.conf"))
+	m.Assert(e)
+	defer o.Close()
+	for bio.Scan() {
+		if strings.HasPrefix(strings.TrimSpace(bio.Text()), "listen") {
+			o.WriteString(kit.Format("        listen        %s;", m.Option(kit.MDB_PORT)))
+			o.WriteString("\n")
+			continue
+		}
+		o.WriteString(bio.Text())
+		o.WriteString("\n")
+	}
+}
 
 const (
 	NGINX  = "nginx"
@@ -58,7 +84,7 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 				m.Cmd(cli.SYSTEM, "cp", "-r", path.Join(m.Conf(code.INSTALL, kit.META_PATH), name, "conf"), p)
 				m.Cmd(cli.SYSTEM, "cp", "-r", path.Join(m.Conf(code.INSTALL, kit.META_PATH), name, "html"), p)
 				m.Cmd(cli.SYSTEM, "cp", "-r", path.Join(m.Conf(code.INSTALL, kit.META_PATH), name, "objs/nginx"), path.Join(p, "bin"))
-				m.Cmd(cli.SYSTEM, "sed", "-i", kit.Format("s/80/%s/", m.Option(kit.MDB_PORT)), path.Join(p, "conf/nginx.conf"))
+				_nginx_port(m, p)
 
 				// 启动
 				m.Option(cli.CMD_DIR, p)
