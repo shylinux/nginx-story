@@ -1,9 +1,10 @@
-title "20200108-nginx_story"
-
+title "nginx"
 refer "官网" `
 官网 https://nginx.org
-文档 https://nginx.org/en/docs/
 源码 https://github.com/nginx/nginx
+文档 https://nginx.org/en/docs/
 `
+premenu
+
 source server/server.shy
 

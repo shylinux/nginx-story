@@ -1,30 +1,29 @@
 chapter "server"
+section "服务体验"
+field "服务器" web.code.nginx.server
+field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_hash.h ]`
 
-section "下载"
-refer `
-下载 https://nginx.org/download/nginx-1.8.1.tar.gz
+section "安装编译"
+spark shell `
+wget https://nginx.org/download/nginx-1.8.1.tar.gz
+tar xvf nginx-1.8.1.tar.gz && cd nginx-1.8.1
+./configure --prefix=./install
+make -j8 && make install
 `
 
-section "解压编译"
-spark shell `
-tar xvf nginx-1.8.1.tar.gz
-cd nginx-1.8.1
-./configure
-make
-make install
+section "配置服务"
+spark `
+将conf/nginx.conf文件中，listen配置项指定端口号9090
 `
 
 section "启动服务"
 spark shell `
-nginx
+cd ./install
+./sbin/nginx &
 `
 
 section "连接服务"
 spark shell `
-curl localhost
+curl localhost:9090
 `
-
-section "体验"
-field "服务器" web.code.nginx.server
-field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_hash.h ]`
 

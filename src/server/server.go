@@ -5,7 +5,6 @@ import (
 	"github.com/shylinux/icebergs/base/cli"
 	"github.com/shylinux/icebergs/base/gdb"
 	"github.com/shylinux/icebergs/base/mdb"
-	"github.com/shylinux/icebergs/base/nfs"
 	"github.com/shylinux/icebergs/base/tcp"
 	"github.com/shylinux/icebergs/base/web"
 	"github.com/shylinux/icebergs/core/code"
@@ -34,7 +33,7 @@ func _nginx_port(m *ice.Message, p string) {
 	defer o.Close()
 	for bio.Scan() {
 		if strings.HasPrefix(strings.TrimSpace(bio.Text()), "listen") {
-			o.WriteString(kit.Format("        listen        %s;", m.Option(kit.MDB_PORT)))
+			o.WriteString(kit.Format("        listen        %s;", path.Base(p)))
 			o.WriteString("\n")
 			continue
 		}
@@ -50,7 +49,7 @@ const (
 
 var Index = &ice.Context{Name: NGINX, Help: "nginx",
 	Configs: map[string]*ice.Config{
-		SERVER: {Name: SERVER, Help: "服务器", Value: kit.Data(
+		NGINX: {Name: NGINX, Help: "服务器", Value: kit.Data(
 			"windows", "https://nginx.org/download/nginx-1.8.1.zip",
 			"darwin", "https://nginx.org/download/nginx-1.8.1.tar.gz",
 			"linux", "https://nginx.org/download/nginx-1.8.1.tar.gz",
@@ -62,65 +61,70 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 
 		SERVER: {Name: "server port=auto auto 启动:button 编译:button 下载:button", Help: "服务器", Action: map[string]*ice.Action{
 			"download": {Name: "download", Help: "下载", Hand: func(m *ice.Message, arg ...string) {
-				m.Cmdy("web.code.install", "download", m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)))
+				m.Cmdy(code.INSTALL, "download", m.Conf(NGINX, kit.Keys(kit.MDB_META, runtime.GOOS)))
 			}},
 			"compile": {Name: "compile", Help: "编译", Hand: func(m *ice.Message, arg ...string) {
-				name := path.Base(strings.TrimSuffix(strings.TrimSuffix(m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)), ".tar.gz"), "zip"))
+				name := path.Base(strings.TrimSuffix(strings.TrimSuffix(m.Conf(NGINX, kit.Keys(kit.MDB_META, runtime.GOOS)), ".tar.gz"), "zip"))
 				m.Option(cli.CMD_DIR, path.Join(m.Conf(code.INSTALL, kit.META_PATH), name))
-				m.Cmdy(cli.SYSTEM, "./configure")
-				m.Cmdy(cli.SYSTEM, "make")
+				m.Cmdy(cli.SYSTEM, "./configure", "--prefix=./install")
+				m.Cmdy(cli.SYSTEM, "make", "-j8")
+				m.Cmdy(cli.SYSTEM, "make", "install")
 			}},
-			gdb.START: {Name: "start", Help: "启动", Hand: func(m *ice.Message, arg ...string) {
-				if m.Option(kit.MDB_PORT) == "" {
-					m.Option(kit.MDB_PORT, m.Cmdx(tcp.PORT, "get"))
+			"start": {Name: "start", Help: "启动", Hand: func(m *ice.Message, arg ...string) {
+				// 分配
+				port, p := "", ""
+				for {
+					port = m.Cmdx(tcp.PORT, "select", port)
+					p = path.Join(m.Conf(cli.DAEMON, kit.META_PATH), port)
+					if _, e := os.Stat(p); e != nil && os.IsNotExist(e) {
+						break
+					}
+					port = kit.Format(kit.Int(port) + 1)
 				}
-				p := path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(kit.MDB_PORT))
-				os.MkdirAll(path.Join(p, "logs"), ice.MOD_DIR)
-				os.MkdirAll(path.Join(p, "bin"), ice.MOD_DIR)
-				os.MkdirAll(p, ice.MOD_DIR)
 
 				// 复制
-				name := path.Base(strings.TrimSuffix(strings.TrimSuffix(m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)), ".tar.gz"), "zip"))
-				m.Cmd(cli.SYSTEM, "cp", "-r", path.Join(m.Conf(code.INSTALL, kit.META_PATH), name, "conf"), p)
-				m.Cmd(cli.SYSTEM, "cp", "-r", path.Join(m.Conf(code.INSTALL, kit.META_PATH), name, "html"), p)
-				m.Cmd(cli.SYSTEM, "cp", "-r", path.Join(m.Conf(code.INSTALL, kit.META_PATH), name, "objs/nginx"), path.Join(p, "bin"))
+				name := path.Base(strings.TrimSuffix(strings.TrimSuffix(m.Conf(NGINX, kit.Keys(kit.MDB_META, runtime.GOOS)), ".tar.gz"), "zip"))
+				from := kit.Path(path.Join(m.Conf(code.INSTALL, kit.META_PATH), name, "install"))
+				m.Cmdy(cli.SYSTEM, "cp", "-r", from, p)
 				_nginx_port(m, p)
 
 				// 启动
 				m.Option(cli.CMD_DIR, p)
-				m.Cmdy(cli.DAEMON, "bin/nginx", "-p", kit.Path(p))
+				m.Cmdy(cli.DAEMON, "sbin/nginx", "-p", kit.Path(p))
 			}},
 			gdb.STOP: {Name: "stop", Help: "停止", Hand: func(m *ice.Message, arg ...string) {
 				p := path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(kit.MDB_PORT))
 				m.Option(cli.CMD_DIR, p)
-				m.Cmdy(cli.SYSTEM, "bin/nginx", "-p", kit.Path(p), "-s", "stop")
+				m.Cmdy(cli.SYSTEM, "sbin/nginx", "-p", kit.Path(p), "-s", "stop")
 			}},
 			gdb.RELOAD: {Name: "reload", Help: "重载", Hand: func(m *ice.Message, arg ...string) {
 				p := path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(kit.MDB_PORT))
 				m.Option(cli.CMD_DIR, p)
-				m.Cmdy(cli.SYSTEM, "bin/nginx", "-p", kit.Path(p), "-s", "reload")
+				m.Cmdy(cli.SYSTEM, "sbin/nginx", "-p", kit.Path(p), "-s", "reload")
 			}},
 			gdb.RESTART: {Name: "restart", Help: "重启", Hand: func(m *ice.Message, arg ...string) {
 				p := path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(kit.MDB_PORT))
 				m.Option(cli.CMD_DIR, p)
-				m.Cmdy(cli.SYSTEM, "bin/nginx", "-p", kit.Path(p), "-s", "restart")
+				m.Cmdy(cli.SYSTEM, "sbin/nginx", "-p", kit.Path(p), "-s", "restart")
 			}},
 		}, Hand: func(m *ice.Message, c *ice.Context, cmd string, arg ...string) {
-			if len(arg) == 0 {
-				u := kit.ParseURL(m.Option(ice.MSG_USERWEB))
-				m.Cmd(cli.DAEMON).Table(func(index int, value map[string]string, head []string) {
-					if strings.HasPrefix(value[kit.MDB_NAME], "bin/nginx") {
-						m.Push(kit.MDB_TIME, value[kit.MDB_TIME])
-						m.Push(kit.MDB_PORT, path.Base(value[kit.MDB_DIR]))
-						m.Push(kit.MDB_NAME, value[kit.MDB_NAME])
-						m.Push(kit.MDB_LINK, m.Cmdx(mdb.RENDER, web.RENDER.A,
-							kit.Format("http://%s:%s", u.Hostname(), path.Base(value[kit.MDB_DIR]))))
-					}
-				})
-				m.PushAction("重载", "重启", "停止")
+			if len(arg) > 0 && arg[0] != "" {
+				m.Cmdy(mdb.RENDER, web.RENDER.Frame, "http://shylinux.com:"+m.Option("port"))
 				return
 			}
-			m.Cmdy(nfs.CAT, path.Join(m.Conf(cli.DAEMON, kit.META_PATH), arg[0], "conf/nginx.conf"))
+
+			u := kit.ParseURL(m.Option(ice.MSG_USERWEB))
+			m.Cmd(cli.DAEMON).Table(func(index int, value map[string]string, head []string) {
+				if strings.HasPrefix(value[kit.MDB_NAME], "sbin/nginx") {
+					m.Push(kit.MDB_TIME, value[kit.MDB_TIME])
+					m.Push(kit.MDB_PORT, path.Base(value[kit.MDB_DIR]))
+					m.Push(kit.MDB_NAME, value[kit.MDB_NAME])
+					m.Push(kit.MDB_LINK, m.Cmdx(mdb.RENDER, web.RENDER.A,
+						kit.Format("http://%s:%s", u.Hostname(), path.Base(value[kit.MDB_DIR]))))
+				}
+			})
+			m.PushAction("重载", "重启", "停止")
+			m.Sort("time", "time_r")
 		}},
 	},
 }
