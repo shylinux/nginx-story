@@ -1,4 +1,6 @@
 chapter "server"
+field "服务器" cli.daemon
+field "服务器" web.code.install
 section "服务体验"
 field "服务器" web.code.nginx.server
 field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_hash.h ]`
@@ -13,7 +15,7 @@ make -j8 && make install
 
 section "配置服务"
 spark `
-将conf/nginx.conf文件中，listen配置项指定端口号9090
+将install/conf/nginx.conf文件中，listen配置项指定端口号9090
 `
 
 section "启动服务"
