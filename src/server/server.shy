@@ -1,7 +1,4 @@
 chapter "server"
-field "服务器" cli.daemon
-field "服务器" web.code.install
-section "服务体验"
 field "服务器" web.code.nginx.server
 field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_hash.h ]`
 
@@ -9,7 +6,7 @@ section "安装编译"
 spark shell `
 wget https://nginx.org/download/nginx-1.8.1.tar.gz
 tar xvf nginx-1.8.1.tar.gz && cd nginx-1.8.1
-./configure --prefix=./install
+./configure --prefix=$PWD/install
 make -j8 && make install
 `
 
