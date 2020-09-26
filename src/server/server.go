@@ -45,7 +45,7 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 				m.Cmdy(code.INSTALL, "start", m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)), "sbin/nginx")
 			}},
 			"reload": {Name: "reload", Help: "重载", Hand: func(m *ice.Message, arg ...string) {
-				p := m.Option(cli.CMD_DIR, kit.Path(path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(kit.MDB_PORT))))
+				p := m.Option(cli.CMD_DIR, kit.Path(path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(kit.SSH_PORT))))
 				m.Cmdy(cli.SYSTEM, "sbin/nginx", "-p", p, "-s", "reload")
 			}},
 		}, Hand: func(m *ice.Message, c *ice.Context, cmd string, arg ...string) {
