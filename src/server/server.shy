@@ -4,25 +4,24 @@ field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_h
 
 section "安装编译"
 spark shell `
-wget https://nginx.org/download/nginx-1.8.1.tar.gz
-tar xvf nginx-1.8.1.tar.gz && cd nginx-1.8.1
-./configure --prefix=$PWD/install
-make -j8 && make install
-`
+yum install -y wget make gcc
+yum install -y pcre-devel.x86_64 zlib-devel.x86_64 openssl-devel.x86_64
 
-section "配置服务"
-spark `
-将install/conf/nginx.conf文件中，listen配置项指定端口号9090
+wget https://nginx.org/download/nginx-1.18.0.tar.gz
+tar xvf nginx-1.18.0.tar.gz && cd nginx-1.18.0
+
+./configure --prefix=$PWD/_install
+make -j8 && make install
 `
 
 section "启动服务"
 spark shell `
-cd ./install
+cd ./_install
 ./sbin/nginx &
 `
 
 section "连接服务"
 spark shell `
-curl localhost:9090
+curl localhost
 `
 
