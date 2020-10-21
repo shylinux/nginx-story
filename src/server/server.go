@@ -42,7 +42,7 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 						}
 						return line
 					})
-					return []string{"-p", kit.Path(p)}
+					return []string{"-p", kit.Path(p), "-g", "daemon off;"}
 				})
 				m.Cmdy(code.INSTALL, gdb.START, m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)), "sbin/nginx")
 			}},
