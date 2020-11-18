@@ -1,8 +1,8 @@
 chapter "server"
 field "服务器" web.code.nginx.server
-field "源代码" web.code.inner args `[ usr/install/nginx-1.8.1/src/ core/ngx_hash.h ]`
+field "源代码" web.code.inner args `usr/install/nginx-1.8.1/src/ core/ngx_hash.h`
 
-section "安装编译"
+section "编译安装"
 spark shell `
 yum install -y wget make gcc
 yum install -y pcre-devel.x86_64 zlib-devel.x86_64 openssl-devel.x86_64

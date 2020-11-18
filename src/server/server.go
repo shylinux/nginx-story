@@ -4,6 +4,7 @@ import (
 	ice "github.com/shylinux/icebergs"
 	"github.com/shylinux/icebergs/base/cli"
 	"github.com/shylinux/icebergs/base/gdb"
+	"github.com/shylinux/icebergs/base/tcp"
 	"github.com/shylinux/icebergs/base/web"
 	"github.com/shylinux/icebergs/core/code"
 	kit "github.com/shylinux/toolkits"
@@ -55,7 +56,7 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 			if len(arg) == 0 || arg[0] == "" {
 				m.Table(func(index int, value map[string]string, head []string) {
 					u := kit.ParseURL(m.Option(ice.MSG_USERWEB))
-					m.PushAnchor(kit.Format("http://%s:%s", u.Hostname(), value["port"]))
+					m.PushAnchor(kit.Format("http://%s:%s", u.Hostname(), value[tcp.PORT]))
 					m.PushButton(gdb.RELOAD)
 				})
 			}
