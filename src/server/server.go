@@ -1,6 +1,10 @@
 package server
 
 import (
+	"path"
+	"runtime"
+	"strings"
+
 	ice "github.com/shylinux/icebergs"
 	"github.com/shylinux/icebergs/base/cli"
 	"github.com/shylinux/icebergs/base/gdb"
@@ -8,10 +12,6 @@ import (
 	"github.com/shylinux/icebergs/base/web"
 	"github.com/shylinux/icebergs/core/code"
 	kit "github.com/shylinux/toolkits"
-
-	"path"
-	"runtime"
-	"strings"
 )
 
 const (
@@ -36,7 +36,7 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 				m.Cmdy(code.INSTALL, gdb.BUILD, m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)))
 			}},
 			gdb.START: {Name: "start", Help: "启动", Hand: func(m *ice.Message, arg ...string) {
-				m.Optionv("prepare", func(p string) []string {
+				m.Optionv(code.PREPARE, func(p string) []string {
 					kit.Rewrite(path.Join(p, "conf/nginx.conf"), func(line string) string {
 						if strings.HasPrefix(strings.TrimSpace(line), "listen") {
 							return strings.ReplaceAll(line, kit.Split(line, "\t ", ";")[1], path.Base(p))
