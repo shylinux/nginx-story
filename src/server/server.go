@@ -33,7 +33,7 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 				m.Cmdy(code.INSTALL, web.DOWNLOAD, m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)))
 			}},
 			gdb.BUILD: {Name: "build", Help: "构建", Hand: func(m *ice.Message, arg ...string) {
-				m.Cmdy(code.INSTALL, gdb.BUILD, m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)))
+				m.Cmdy(code.INSTALL, gdb.BUILD, m.Conf(SERVER, kit.Keys(kit.MDB_META, runtime.GOOS)), "--with-http_ssl_module")
 			}},
 			gdb.START: {Name: "start", Help: "启动", Hand: func(m *ice.Message, arg ...string) {
 				m.Optionv(code.PREPARE, func(p string) []string {
