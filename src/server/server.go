@@ -15,9 +15,9 @@ import (
 )
 
 const (
-	SERVER = "server"
+	NGINX = "nginx"
 )
-const NGINX = "nginx"
+const SERVER = "server"
 
 var Index = &ice.Context{Name: NGINX, Help: "nginx",
 	Configs: map[string]*ice.Config{
