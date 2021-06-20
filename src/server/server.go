@@ -7,7 +7,6 @@ import (
 
 	ice "github.com/shylinux/icebergs"
 	"github.com/shylinux/icebergs/base/cli"
-	"github.com/shylinux/icebergs/base/gdb"
 	"github.com/shylinux/icebergs/base/tcp"
 	"github.com/shylinux/icebergs/base/web"
 	"github.com/shylinux/icebergs/core/code"
@@ -32,10 +31,10 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 			web.DOWNLOAD: {Name: "download", Help: "下载", Hand: func(m *ice.Message, arg ...string) {
 				m.Cmdy(code.INSTALL, web.DOWNLOAD, m.Conf(SERVER, kit.Keym(runtime.GOOS)))
 			}},
-			gdb.BUILD: {Name: "build", Help: "构建", Hand: func(m *ice.Message, arg ...string) {
-				m.Cmdy(code.INSTALL, gdb.BUILD, m.Conf(SERVER, kit.Keym(runtime.GOOS)), "--with-http_ssl_module")
+			cli.BUILD: {Name: "build", Help: "构建", Hand: func(m *ice.Message, arg ...string) {
+				m.Cmdy(code.INSTALL, cli.BUILD, m.Conf(SERVER, kit.Keym(runtime.GOOS)), "--with-http_ssl_module")
 			}},
-			gdb.START: {Name: "start", Help: "启动", Hand: func(m *ice.Message, arg ...string) {
+			cli.START: {Name: "start", Help: "启动", Hand: func(m *ice.Message, arg ...string) {
 				m.Optionv(code.PREPARE, func(p string) []string {
 					kit.Rewrite(path.Join(p, "conf/nginx.conf"), func(line string) string {
 						if strings.HasPrefix(strings.TrimSpace(line), "listen") {
@@ -45,9 +44,9 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 					})
 					return []string{"-p", kit.Path(p), "-g", "daemon off;"}
 				})
-				m.Cmdy(code.INSTALL, gdb.START, m.Conf(SERVER, kit.Keym(runtime.GOOS)), "sbin/nginx")
+				m.Cmdy(code.INSTALL, cli.START, m.Conf(SERVER, kit.Keym(runtime.GOOS)), "sbin/nginx")
 			}},
-			gdb.RELOAD: {Name: "reload", Help: "重载", Hand: func(m *ice.Message, arg ...string) {
+			cli.RELOAD: {Name: "reload", Help: "重载", Hand: func(m *ice.Message, arg ...string) {
 				p := m.Option(cli.CMD_DIR, kit.Path(path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(tcp.PORT))))
 				m.Cmdy(cli.SYSTEM, "sbin/nginx", "-p", p, "-s", "reload")
 			}},
@@ -57,7 +56,7 @@ var Index = &ice.Context{Name: NGINX, Help: "nginx",
 				m.Table(func(index int, value map[string]string, head []string) {
 					u := kit.ParseURL(m.Option(ice.MSG_USERWEB))
 					m.PushAnchor(kit.Format("http://%s:%s", u.Hostname(), value[tcp.PORT]))
-					m.PushButton(gdb.RELOAD)
+					m.PushButton(cli.RELOAD)
 				})
 			}
 		}},
