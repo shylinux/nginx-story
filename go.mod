@@ -1,8 +1,8 @@
-module github.com/shylinux/nginx-story
+module shylinux.com/x/nginx-story
 
 go 1.13
 
 require (
-	github.com/shylinux/icebergs v0.3.1
-	github.com/shylinux/toolkits v0.2.1
+	shylinux.com/x/icebergs v0.3.1
+	shylinux.com/x/toolkits v0.2.1
 )
