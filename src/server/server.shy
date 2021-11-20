@@ -19,6 +19,9 @@ spark shell `
 cd ./_install
 ./sbin/nginx &
 `
+spark shell `
+./sbin/nginx -p $PWD -s reload
+`
 
 section "连接服务"
 spark shell `
