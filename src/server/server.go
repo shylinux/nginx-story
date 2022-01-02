@@ -6,6 +6,7 @@ import (
 
 	"shylinux.com/x/ice"
 	"shylinux.com/x/icebergs/base/cli"
+	"shylinux.com/x/icebergs/base/nfs"
 	"shylinux.com/x/icebergs/base/tcp"
 	kit "shylinux.com/x/toolkits"
 )
@@ -18,10 +19,10 @@ type server struct {
 }
 
 func (s server) Download(m *ice.Message, arg ...string) {
-	s.Code.Download(m, m.Config(cli.SOURCE), arg...)
+	s.Code.Download(m, m.Config(nfs.SOURCE), arg...)
 }
 func (s server) Build(m *ice.Message, arg ...string) {
-	s.Code.Build(m, m.Config(cli.SOURCE), "--with-http_ssl_module")
+	s.Code.Build(m, m.Config(nfs.SOURCE), "--with-http_ssl_module")
 }
 func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Prepare(m, func(p string) []string {
@@ -33,14 +34,14 @@ func (s server) Start(m *ice.Message, arg ...string) {
 		})
 		return []string{"-p", kit.Path(p), "-g", "daemon off;"}
 	})
-	s.Code.Start(m, m.Config(cli.SOURCE), "sbin/nginx")
+	s.Code.Start(m, m.Config(nfs.SOURCE), "sbin/nginx")
 }
 func (s server) Reload(m *ice.Message, arg ...string) {
 	p := kit.Path(path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(tcp.PORT)))
 	s.Code.System(m, p, "sbin/nginx", "-p", p, "-s", "reload")
 }
 func (s server) List(m *ice.Message, arg ...string) {
-	s.Code.List(m, m.Config(cli.SOURCE), arg...)
+	s.Code.List(m, m.Config(nfs.SOURCE), arg...)
 	if len(arg) == 0 || arg[0] == "" {
 		u := m.OptionUserWeb()
 		m.Table(func(index int, value map[string]string, head []string) {
