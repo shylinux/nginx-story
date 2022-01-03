@@ -37,7 +37,7 @@ func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Start(m, m.Config(nfs.SOURCE), "sbin/nginx")
 }
 func (s server) Reload(m *ice.Message, arg ...string) {
-	p := kit.Path(path.Join(m.Conf(cli.DAEMON, kit.META_PATH), m.Option(tcp.PORT)))
+	p := kit.Path(path.Join(m.Conf(cli.DAEMON, kit.Keym(nfs.PATH)), m.Option(tcp.PORT)))
 	s.Code.System(m, p, "sbin/nginx", "-p", p, "-s", "reload")
 }
 func (s server) List(m *ice.Message, arg ...string) {
