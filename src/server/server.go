@@ -15,7 +15,7 @@ type server struct {
 	ice.Code
 
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
-	reload string `name:"start" help:"重载"`
+	reload string `name:"reload" help:"重载"`
 }
 
 func (s server) Download(m *ice.Message, arg ...string) {
@@ -41,13 +41,10 @@ func (s server) Reload(m *ice.Message, arg ...string) {
 	s.Code.System(m, p, "sbin/nginx", "-p", p, "-s", "reload")
 }
 func (s server) List(m *ice.Message, arg ...string) {
-	s.Code.List(m, m.Config(nfs.SOURCE), arg...)
-	if len(arg) == 0 || arg[0] == "" {
-		u := m.OptionUserWeb()
+	if s.Code.List(m, m.Config(nfs.SOURCE), arg...); len(arg) == 0 || arg[0] == "" {
 		m.Table(func(index int, value map[string]string, head []string) {
-			m.PushAnchor(kit.Format("http://%s:%s", u.Hostname(), value[tcp.PORT]))
-		})
-		m.PushAction(s.Reload)
+			m.PushAnchor(kit.Format("http://%s:%s", m.OptionUserWeb().Hostname(), value[tcp.PORT]))
+		}).PushAction(s.Reload)
 	}
 }
-func init() { ice.Cmd("web.code.nginx.server", server{}) }
+func init() { ice.CodeModCmd(server{}) }
