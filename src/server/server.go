@@ -15,6 +15,7 @@ type server struct {
 	ice.Code
 
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
+	start  string `name:"start port" help:"启动"`
 	reload string `name:"reload" help:"重载"`
 }
 
