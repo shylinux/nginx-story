@@ -34,7 +34,7 @@ func (s server) Reload(m *ice.Message, arg ...string) {
 	s.Code.System(m, m.Option(nfs.DIR), "sbin/nginx", "-p", nfs.PWD, "-s", "reload")
 }
 func (s server) List(m *ice.Message, arg ...string) {
-	if s.Code.List(m, "", arg...); len(arg) == 0 || arg[0] == "" {
+	if s.Code.List(m, "", arg...); len(arg) < 1 || arg[0] == "" {
 		m.PushAction(s.Reload)
 	}
 }
