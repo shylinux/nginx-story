@@ -12,6 +12,8 @@ import (
 type server struct {
 	ice.Code
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
+	action string `data:"reload"`
+
 	reload string `name:"reload" help:"重载"`
 	list   string `name:"list port path auto start build download" help:"代理"`
 }
@@ -34,8 +36,6 @@ func (s server) Reload(m *ice.Message, arg ...string) {
 	s.Code.System(m, m.Option(nfs.DIR), "sbin/nginx", "-p", nfs.PWD, "-s", "reload")
 }
 func (s server) List(m *ice.Message, arg ...string) {
-	if s.Code.List(m, "", arg...); len(arg) < 1 || arg[0] == "" {
-		m.PushAction(s.Reload)
-	}
+	s.Code.List(m, "", arg...)
 }
 func init() { ice.CodeModCmd(server{}) }

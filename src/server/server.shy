@@ -3,7 +3,7 @@ field "服务器" web.code.nginx.server
 field "源代码" web.code.inner args `usr/install/nginx-1.19.1/src/ core/ngx_hash.h`
 
 section "编译安装"
-spark shell `
+shell `
 yum install -y wget make gcc
 yum install -y pcre-devel.x86_64 zlib-devel.x86_64 openssl-devel.x86_64
 
@@ -15,24 +15,20 @@ make -j8 && make install
 `
 
 section "启动服务"
-spark shell `
+shell `
 cd ./_install
 ./sbin/nginx -p $PWD &
-`
-spark shell `
 ./sbin/nginx -p $PWD -s reload
 `
 
 section "连接服务"
-spark shell `
+shell `
 curl localhost
 `
 
-spark shell `
+shell `
 cd usr/local/daemon/10000/
-sudo ./sbin/nginx -p $PWD
-
 cp ~/contexts/etc/conf/*.conf conf/
-./sbin/nginx -p $PWD -s reload
+sudo ./sbin/nginx -p $PWD
+sudo ./sbin/nginx -p $PWD -s reload
 `
-
