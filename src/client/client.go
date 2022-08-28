@@ -14,7 +14,7 @@ type client struct {
 	field string `data:"time,sess,proto,host,port,path"`
 
 	create string `name:"create sess=biz proto=http host=localhost port=10004 path=/" help:"创建"`
-	list   string `name:"list sess@key auto create" help:"搜索引擎"`
+	list   string `name:"list sess@key auto create" help:"客户端"`
 }
 
 func (s client) List(m *ice.Message, arg ...string) {
