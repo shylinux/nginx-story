@@ -1,6 +1,3 @@
-source server/source.shy
-return
-
 title "nginx"
 refer `
 官网 https://nginx.org
