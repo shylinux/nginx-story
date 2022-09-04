@@ -1,6 +1,91 @@
 chapter "源码解析"
 field "计数" web.code.git.count args usr/install/nginx-1.19.1/src/
 
+web.code.ctags.chain `
+nginx/src/core/
+	数据类型
+		ngx_string.c
+		ngx_string.h
+	数据结构
+		ngx_array.c
+		ngx_array.h
+		ngx_list.c
+		ngx_list.h
+		ngx_queue.c
+		ngx_queue.h
+		ngx_rbtree.c
+		ngx_rbtree.h
+		ngx_hash.c
+		ngx_hash.h
+		ngx_radix_tree.c
+		ngx_radix_tree.h
+	哈希算法
+		ngx_md5.c
+		ngx_md5.h
+		ngx_sha1.c
+		ngx_sha1.h
+		ngx_crypt.c
+		ngx_crypt.h
+		ngx_crc.h
+		ngx_crc32.c
+		ngx_crc32.h
+		ngx_murmurhash.c
+		ngx_murmurhash.h
+	文件与内存
+		ngx_inet.c
+		ngx_inet.h
+		ngx_resolver.c
+		ngx_resolver.h
+		ngx_file.c
+		ngx_file.h
+		ngx_open_file_cache.c
+		ngx_open_file_cache.h
+		ngx_palloc.c
+		ngx_palloc.h
+		ngx_buf.c
+		ngx_buf.h
+		ngx_slab.c
+		ngx_slab.h
+	进程与并发
+		ngx_cpuinfo.c
+		ngx_spinlock.c
+		ngx_rwlock.c
+		ngx_rwlock.h
+		ngx_shmtx.c
+		ngx_shmtx.h
+		ngx_thread_pool.c
+		ngx_thread_pool.h
+	框架与模块
+		nginx.c
+		nginx.h
+		ngx_core.h
+		ngx_config.h
+		ngx_conf_file.c
+		ngx_conf_file.h
+		ngx_connection.c
+		ngx_connection.h
+		ngx_cycle.c
+		ngx_cycle.h
+		ngx_module.c
+		ngx_module.h
+		ngx_regex.c
+		ngx_regex.h
+		ngx_parse.c
+		ngx_parse.h
+		ngx_parse_time.c
+		ngx_parse_time.h
+		ngx_proxy_protocol.c
+		ngx_proxy_protocol.h
+		ngx_output_chain.c
+		ngx_log.c
+		ngx_log.h
+		ngx_syslog.c
+		ngx_syslog.h
+		ngx_times.c
+		ngx_times.h
+` path "usr/install/nginx-1.19.1/src/core/"
+
+return
 section "目录文件"
 web.code.ctags.chain `
 nginx/src/core/
@@ -331,3 +416,5 @@ ngx_cycle
 	read_events
 	write_events
 ` path "usr/install/nginx-1.19.1/"
+
+
