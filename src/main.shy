@@ -6,6 +6,6 @@ refer `
 `
 
 source server/server.shy
-source client/client.shy
 source server/source.shy
+source client/client.shy
 

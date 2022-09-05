@@ -7,16 +7,16 @@ nginx/src/core/
 		ngx_string.c
 		ngx_string.h
 	数据结构
+		ngx_queue.c
+		ngx_queue.h
 		ngx_array.c
 		ngx_array.h
 		ngx_list.c
 		ngx_list.h
-		ngx_queue.c
-		ngx_queue.h
-		ngx_rbtree.c
-		ngx_rbtree.h
 		ngx_hash.c
 		ngx_hash.h
+		ngx_rbtree.c
+		ngx_rbtree.h
 		ngx_radix_tree.c
 		ngx_radix_tree.h
 	哈希算法
