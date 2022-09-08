@@ -1,6 +1,31 @@
 chapter "源码解析"
-field "计数" web.code.git.count args usr/install/nginx-1.19.1/src/
+refer `
+https://pan.baidu.com/disk/pdfview?path=%2F%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF%2F2022%2F%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Nginx%20%E6%A8%A1%E5%9D%97%E5%BC%80%E5%8F%91%E4%B8%8E%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90.pdf
+`
 
+field "计数" web.code.git.count args `usr/install/nginx-1.19.1/src/`
+
+web.code.ctags.chain `
+configure
+	目录
+		--prefix
+		--sbin-path
+		--conf-path
+		--error-log-path
+		--pid-path
+		--lock-path
+		--builddir-path
+		--http-log-path
+		--http-client-body-temp-path
+		--http-proxy-temp-path
+		--http-fastcgi-temp-path
+		--http-uwsgi-temp-path
+		--http-scgi-temp-path
+`
+
+label `
+配置 模块 文件 内存 日志
+`
 web.code.ctags.chain `
 nginx/src/core/
 	数据类型
@@ -83,6 +108,9 @@ nginx/src/core/
 		ngx_syslog.h
 		ngx_times.c
 		ngx_times.h
+` path "usr/install/nginx-1.19.1/src/core/"
+web.code.ctags.chain `
+main
 ` path "usr/install/nginx-1.19.1/src/core/"
 
 return
@@ -416,5 +444,4 @@ ngx_cycle
 	read_events
 	write_events
 ` path "usr/install/nginx-1.19.1/"
-
 
