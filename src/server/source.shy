@@ -1,9 +1,11 @@
 chapter "源码解析"
 refer `
+HTTPStatusCode https://www.cnblogs.com/OpenCoder/p/16265950.html
 https://pan.baidu.com/disk/pdfview?path=%2F%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF%2F2022%2F%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Nginx%20%E6%A8%A1%E5%9D%97%E5%BC%80%E5%8F%91%E4%B8%8E%E6%9E%B6%E6%9E%84%E8%A7%A3%E6%9E%90.pdf
 `
 
 field "计数" web.code.git.count args `usr/install/nginx-1.19.1/src/`
+option ctags.path "usr/install/nginx-1.19.1/src/"
 
 web.code.ctags.chain `
 configure
@@ -21,16 +23,178 @@ configure
 		--http-fastcgi-temp-path
 		--http-uwsgi-temp-path
 		--http-scgi-temp-path
+	编译
+		--with-cc
+		--with-cpp
+		--with-cc-opt
+		--with-ld-opt
+		--with-cpu-opt
+	用户
+		--with-http_ssl_module
+		--with-debug
+		--add-module
+		--group
+		--user
+`
+web.code.ctags.chain `
+sbin/nginx
+	-p
+	-c
+	-t
+	-g
+	-s
+		quit
+		reload
+		reopen
+	-q
+	-v
+	-V
+`
+web.code.ctags.chain `
+nginx.conf
+	user
+	daemon
+	master_process
+	work_processes
+	error_log
+	pid
+	events
+		work_connections
+	http
+		log_format
+			$host
+			$uri
+			$arg_
+			$http_
+			$cookie_
+			$remote_
+			$server_
+		access_log
+		error_page
+		upstream
+			server
+		server
+			listen
+			server_name
+			location
+				root
+				alias
+				index
+				proxy_pass
 `
 
-label `
-配置 模块 文件 内存 日志
+web.code.ctags.chain `
+ngx_http_demo_module:ngx_module_t
+	ngx_http_demo_module_ctx:ngx_http_module_t
+		ngx_http_demo_create_loc_conf
+	ngx_http_demo_commands:ngx_command_t
+		NGX_HTTP_LOC_CONF
+		NGX_CONF_1MORE
+		ngx_conf_set_str_slot
+			cf:ngx_conf_t
+				args:ngx_array_t/ngx_str_t
+					elts
+					nelts
+				cycle:ngx_cycle_t
+				pool:ngx_pool_t
+				log:ngx_log_t
+				ctx:ngx_http_conf_ctx_t
+					main_conf
+					srv_conf
+					loc_conf
+			ngx_http_conf_get_module_loc_conf
+		NGX_HTTP_LOC_CONF_OFFSET
 `
+web.code.ctags.chain `
+ngx_http_demo_handler
+	r:ngx_http_request_t
+		connection:ngx_connection_t
+			data:ngx_http_request_t
+			read:ngx_event_t
+				data:ngx_connection_t
+				handler
+				timer
+			write:ngx_event_t
+				data:ngx_connection_t
+				handler
+				timer
+			listening:ngx_listening_t
+				handler
+			log:ngx_log_t
+			pool:ngx_pool_t
+		ctx
+		main_conf
+		srv_conf
+		loc_conf
+		pool:ngx_pool_t
+		headers_in
+			headers:ngx_list_t
+			host
+			user_agent
+			referer
+			content_length
+			content_type
+			cookies:ngx_array_t
+		headers_out
+			status
+			status_line
+			content_length
+			content_type_len
+			content_type
+		request_body
+		method
+		uri
+		args
+		phase_handler
+		content_handler
+	ngx_http_read_client_request_body
+	ngx_http_discard_request_body
+	ngx_http_send_header
+	ngx_http_output_filter
+	ngx_http_get_module_ctx
+	ngx_http_set_ctx
+	ngx_log_debug
+	ngx_log_error
+	NGX_HTTP_GET
+	NGX_HTTP_HEAD
+	NGX_HTTP_POST
+	NGX_HTTP_PUT
+	NGX_HTTP_DELETE
+	NGX_OK
+	NGX_ERROR
+	NGX_AGAIN
+	NGX_BUSY
+	NGX_DONE
+	NGX_DECLINED
+	NGX_ABORT
+	NGX_HTTP_OK
+	NGX_HTTP_MOVED_PERMANENTLY
+	NGX_HTTP_MOVED_TEMPORARILY
+	NGX_HTTP_SEE_OTHER
+	NGX_HTTP_NOT_MODIFY
+	NGX_HTTP_TEMPORARY_REDIRECT
+	NGX_HTTP_PERMANENT_REDIRECT
+	NGX_HTTP_BAD_REQUEST
+	NGX_HTTP_UNAUTHORIZED
+	NGX_HTTP_FORBIDDEN
+	NGX_HTTP_NOT_FOUND
+	NGX_HTTP_INTERNAL_SERVER_ERROR
+	NGX_HTTP_NOT_IMPLEMENTED
+`
+
 web.code.ctags.chain `
 nginx/src/core/
 	数据类型
 		ngx_string.c
 		ngx_string.h
+		ngx_regex.c
+		ngx_regex.h
+		ngx_times.c
+		ngx_times.h
+		ngx_parse.c
+		ngx_parse.h
+		ngx_parse_time.c
+		ngx_parse_time.h
 	数据结构
 		ngx_queue.c
 		ngx_queue.h
@@ -57,20 +221,26 @@ nginx/src/core/
 		ngx_murmurhash.c
 		ngx_murmurhash.h
 	文件与内存
-		ngx_inet.c
-		ngx_inet.h
-		ngx_resolver.c
-		ngx_resolver.h
 		ngx_file.c
 		ngx_file.h
 		ngx_open_file_cache.c
 		ngx_open_file_cache.h
 		ngx_palloc.c
 		ngx_palloc.h
-		ngx_buf.c
-		ngx_buf.h
 		ngx_slab.c
 		ngx_slab.h
+		ngx_buf.c
+		ngx_buf.h
+		ngx_log.c
+		ngx_log.h
+		ngx_syslog.c
+		ngx_syslog.h
+		ngx_inet.c
+		ngx_inet.h
+		ngx_resolver.c
+		ngx_resolver.h
+		ngx_proxy_protocol.c
+		ngx_proxy_protocol.h
 	进程与并发
 		ngx_cpuinfo.c
 		ngx_spinlock.c
@@ -81,128 +251,119 @@ nginx/src/core/
 		ngx_thread_pool.c
 		ngx_thread_pool.h
 	框架与模块
-		nginx.c
-		nginx.h
 		ngx_core.h
 		ngx_config.h
 		ngx_conf_file.c
 		ngx_conf_file.h
 		ngx_connection.c
 		ngx_connection.h
-		ngx_cycle.c
-		ngx_cycle.h
+		ngx_output_chain.c
 		ngx_module.c
 		ngx_module.h
-		ngx_regex.c
-		ngx_regex.h
-		ngx_parse.c
-		ngx_parse.h
-		ngx_parse_time.c
-		ngx_parse_time.h
-		ngx_proxy_protocol.c
-		ngx_proxy_protocol.h
-		ngx_output_chain.c
-		ngx_log.c
-		ngx_log.h
-		ngx_syslog.c
-		ngx_syslog.h
-		ngx_times.c
-		ngx_times.h
+		ngx_cycle.c
+		ngx_cycle.h
+		nginx.c
+		nginx.h
 ` path "usr/install/nginx-1.19.1/src/core/"
+
+web.code.ctags.chain `
+ngx_cycle:ngx_cycle_t
+	conf_ctx
+		ngx_core_conf_t
+			daemon
+			master
+		ngx_http_core_main_conf_t
+			servers:ngx_array_t/ngx_http_core_srv_conf_t
+				server_name
+				named_locations/ngx_http_core_loc_conf_t
+					name
+					handler
+					loc_conf
+			phase_engine
+			phases
+	pool:ngx_pool_t
+	log:ngx_log_t
+	modules:ngx_module_t
+		ngx_core_module
+			daemon
+			master_process
+			pid
+			lock_file
+		ngx_errlog_module
+		ngx_conf_module
+		ngx_openssl_module
+		ngx_regexp_module
+		ngx_events_module
+		ngx_event_core_module
+		ngx_epoll_module
+		ngx_http_module
+		ngx_http_core_module
+		ngx_http_log_module
+		ngx_http_upstream_module
+		ngx_http_static_module
+		ngx_http_autoindex_module
+		ngx_http_index_module
+		ngx_http_access_module
+		ngx_http_rewrite_module
+		ngx_http_proxy_module
+		ngx_http_write_module
+		ngx_http_header_module
+	listening:ngx_array_t/ngx_listening_t
+		handler=ngx_http_init_connection
+	connections:ngx_connection_t
+		data:ngx_request_t=ngx_http_create_request(c)
+			connection:ngx_connection_t
+			ctx
+			main_conf
+			srv_conf
+			loc_conf
+			pool:ngx_pool_t
+			headers_in
+			headers_out
+			request_body
+		read:ngx_event_t
+		write:ngx_event_t
+		listening:ngx_listening_t
+		log:ngx_log_t
+		pool:ngx_pool_t
+		buffer:ngx_buf_t
+	read_events:ngx_event_t
+		data:ngx_connect_t
+		handler=ngx_http_wait_request_handler(rev)
+		handler=ngx_http_process_request_line(rev)
+		handler=ngx_http_process_request_headers(rev)
+			ngx_http_process_request_header(r)
+			ngx_http_process_request(r)
+		handler=ngx_http_request_handler
+			ngx_http_handler(r)
+				ngx_http_core_run_phases(r)
+					cmcf->phase_engine.handlers[r->phase_handler].checker
+						ngx_http_core_rewrite_phase
+						ngx_http_core_find_config_phase
+						ngx_http_core_rewrite_phase
+						ngx_http_core_post_rewrite_phase
+						ngx_http_core_access_phase
+						ngx_http_core_post_access_phase
+						ngx_http_core_content_phase
+							ph->handler(r)
+								ngx_http_proxy_handler
+									ngx_http_read_client_request_body()
+											ngx_http_upstream_init
+												ngx_http_upstream_init_request(r)
+												ngx_http_upstream_connect(r,u)
+						ngx_http_core_generic_phase
+		timer
+	write_events:ngx_event_t
+		data:ngx_connection_t
+		handler
+		timer
+`
+
 web.code.ctags.chain `
 main
-` path "usr/install/nginx-1.19.1/src/core/"
+`
 
 return
-section "目录文件"
-web.code.ctags.chain `
-nginx/src/core/
-	数据类型
-		ngx_string.c
-		ngx_string.h
-		ngx_regex.c
-		ngx_regex.h
-		ngx_times.c
-		ngx_times.h
-		ngx_parse_time.c
-		ngx_parse_time.h
-		ngx_parse.c
-		ngx_parse.h
-	数据结构
-		ngx_hash.c
-		ngx_hash.h
-		ngx_list.c
-		ngx_list.h
-		ngx_queue.c
-		ngx_queue.h
-		ngx_array.c
-		ngx_array.h
-		ngx_rbtree.c
-		ngx_rbtree.h
-		ngx_radix_tree.c
-		ngx_radix_tree.h
-	哈希算法
-		ngx_crc.h
-		ngx_crc32.c
-		ngx_crc32.h
-		ngx_murmurhash.c
-		ngx_murmurhash.h
-		ngx_md5.c
-		ngx_md5.h
-		ngx_sha1.c
-		ngx_sha1.h
-		ngx_crypt.c
-		ngx_crypt.h
-` path "usr/install/nginx-1.19.1/src/core/"
-
-web.code.ctags.chain `
-nginx/src/core/
-	文件与内存
-		ngx_log.c
-		ngx_log.h
-		ngx_syslog.c
-		ngx_syslog.h
-		ngx_file.c
-		ngx_file.h
-		ngx_open_file_cache.c
-		ngx_open_file_cache.h
-		ngx_output_chain.c
-		ngx_palloc.c
-		ngx_palloc.h
-		ngx_slab.c
-		ngx_slab.h
-		ngx_buf.c
-		ngx_buf.h
-	网络与连接
-		ngx_inet.c
-		ngx_inet.h
-		ngx_resolver.c
-		ngx_resolver.h
-		ngx_proxy_protocol.c
-		ngx_proxy_protocol.h
-		ngx_connection.c
-		ngx_connection.h
-	线程与并发
-		ngx_shmtx.c
-		ngx_shmtx.h
-		ngx_rwlock.c
-		ngx_rwlock.h
-		ngx_spinlock.c
-		ngx_cpuinfo.c
-		ngx_thread_pool.c
-		ngx_thread_pool.h
-	框架与模块
-		nginx.c
-		nginx.h
-		ngx_core.h
-		ngx_cycle.c
-		ngx_cycle.h
-		ngx_module.c
-		ngx_module.h
-		ngx_config.h
-		ngx_conf_file.c
-		ngx_conf_file.h
-` path "usr/install/nginx-1.19.1/src/core/"
 web.code.ctags.chain `
 nginx/src/event/
 	ngx_event.c
@@ -387,7 +548,6 @@ nginx/src/http/os/unix/
 	ngx_sunpro_x86.il
 ` path "usr/install/nginx-1.19.1/src/os/unix/"
 
-
 section  "启动流程"
 web.code.ctags.chain `
 main
@@ -421,27 +581,5 @@ main
 						ngx_event_process_posted
 						ngx_event_process_posted
 			ngx_pass_open_channel
-` path "usr/install/nginx-1.19.1/"
-
-web.code.ctags.chain `
-ngx_cycle
-	conf_ctx
-	pool
-
-	log
-	new_log
-	log_use_stderr
-
-	files
-	free_connections
-	free_connection_n
-	modules
-	modules_n
-	modules_used
-	listening
-	paths
-	connections
-	read_events
-	write_events
 ` path "usr/install/nginx-1.19.1/"
 
