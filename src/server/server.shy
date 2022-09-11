@@ -1,7 +1,6 @@
 chapter "server"
-field "服务器" web.code.nginx.server
-field "源代码" web.code.inner args `usr/install/nginx-1.19.1/src/ core/ngx_cycle.h 39`
-field "源代码" web.code.inner args `src/ demo/ngx_http_demo_module.c`
+field web.code.nginx.server
+field web.code.nginx.source
 
 section "编译安装"
 shell `
@@ -35,4 +34,3 @@ cp ~/contexts/etc/conf/*.conf conf/
 sudo ./sbin/nginx -p $PWD
 sudo ./sbin/nginx -p $PWD -s reload
 `
-
