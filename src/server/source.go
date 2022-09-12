@@ -21,13 +21,14 @@ type source struct {
 }
 
 func (s source) Make(m *ice.Message, arg ...string) {
-	s.Stream(m, s.Path(m, m.Config(server{}, nfs.SOURCE)), cli.MAKE)
 	s.Stream(m, s.Path(m, m.Config(server{}, nfs.SOURCE)), cli.MAKE, "-j8")
+	s.Stream(m, s.Path(m, m.Config(server{}, nfs.SOURCE)), cli.MAKE, "install")
 }
 func (s source) Ctags(m *ice.Message, arg ...string) {
 	p := s.Path(m, m.Config(server{}, nfs.SOURCE), ice.SRC)
 	s.System(m.Spawn(), "", kit.Simple("ctags", "-a", "-R", p, m.Configv(nfs.MODULE))...)
 	s.System(m.Spawn(), p, "ctags", "-a", "-R")
+	m.ProcessHold(ice.SUCCESS)
 }
 func (s source) Module(m *ice.Message, arg ...string) {
 	p := m.Config(kit.Keys("module", m.Option(mdb.NAME)), kit.Format("src/%s/", m.Option(mdb.NAME)))
@@ -35,6 +36,10 @@ func (s source) Module(m *ice.Message, arg ...string) {
 	s.Code.Module(m, p+"config", _module_config_template)
 }
 func (s source) Plugin(m *ice.Message, arg ...string) {
+	if arg[0] == "config" {
+		m.Cmdy(mdb.PLUGIN, nfs.SH, arg[1])
+		return
+	}
 	if arg[0] == "conf" {
 		m.Echo(m.Config(mdb.PLUGIN))
 		return

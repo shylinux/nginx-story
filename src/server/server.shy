@@ -19,7 +19,6 @@ shell `
 cd ./_install
 ./sbin/nginx -p $PWD &
 ./sbin/nginx -p $PWD -s reload
-sysctl
 `
 
 section "连接服务"
@@ -33,4 +32,5 @@ cd usr/local/daemon/10000/
 cp ~/contexts/etc/conf/*.conf conf/
 sudo ./sbin/nginx -p $PWD
 sudo ./sbin/nginx -p $PWD -s reload
+sysctl
 `

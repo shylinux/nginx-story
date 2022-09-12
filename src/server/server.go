@@ -20,7 +20,8 @@ const (
 type server struct {
 	ice.Code
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
-	action string `data:"test,reload,conf,make"`
+	action string `data:"error,test,reload,conf,make"`
+	error  string `name:"error" help:"日志"`
 	test   string `name:"test path=/" help:"测试"`
 	reload string `name:"reload" help:"重载"`
 	conf   string `name:"conf" help:"配置"`
@@ -31,12 +32,15 @@ type server struct {
 func (s server) Inputs(m *ice.Message, arg ...string) {
 	if arg[0] == nfs.PATH {
 		s.System(m, path.Join(m.Option(nfs.DIR), "conf"), "grep", "-rh", "location")
-		list := map[string]struct{}{}
+		list := kit.Dict()
 		for _, v := range strings.Split(m.Result(), ice.NL) {
 			if strings.HasPrefix(strings.TrimSpace(v), "#") {
 				continue
 			}
-			list[kit.Slice(kit.Split(v, ""), -2)[0]] = struct{}{}
+			if strings.TrimSpace(v) == "" {
+				continue
+			}
+			list[kit.Slice(kit.Split(v), -2)[0]] = struct{}{}
 		}
 		for _, k := range kit.SortedKey(list) {
 			m.Push(arg[0], k)
@@ -80,16 +84,17 @@ func (s server) Conf(m *ice.Message, arg ...string) {
 }
 func (s server) Make(m *ice.Message, arg ...string) {
 	s.Code.ToastLong(m, "编译中...", m.Option(nfs.DIR))
-	s.Stream(m, s.Path(m, ""), cli.MAKE)
 	s.Stream(m, s.Path(m, ""), cli.MAKE, "-j8")
+	s.Stream(m, s.Path(m, ""), cli.MAKE, "install")
 
-	s.Code.ToastLong(m, "停止中...", m.Option(nfs.DIR))
 	s.Stop(m)
+	s.Code.ToastLong(m, "停止中...", m.Option(nfs.DIR))
 	m.Sleep("3s")
 
 	s.Code.ToastLong(m, "启动中...", m.Option(nfs.DIR))
 	s.Start(m)
 	m.Sleep("1s")
+
 	s.Code.Toast(m, "启动成功", m.Option(nfs.DIR))
 	m.ProcessRefresh3ms()
 }
