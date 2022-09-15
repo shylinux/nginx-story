@@ -2,6 +2,7 @@ package server
 
 import (
 	"path"
+	"strings"
 
 	"shylinux.com/x/ice"
 	"shylinux.com/x/icebergs/base/cli"
@@ -36,6 +37,10 @@ func (s source) Module(m *ice.Message, arg ...string) {
 	s.Code.Module(m, p+"config", _module_config_template)
 }
 func (s source) Plugin(m *ice.Message, arg ...string) {
+	if strings.HasPrefix(arg[1], "auto/") {
+		m.Cmdy(mdb.PLUGIN, nfs.SH, arg[1])
+		return
+	}
 	if arg[0] == "config" {
 		m.Cmdy(mdb.PLUGIN, nfs.SH, arg[1])
 		return
@@ -53,6 +58,9 @@ func (s source) List(m *ice.Message, arg ...string) {
 	m.Option("tabs", m.Config("show.tabs"))
 	if arg[0] != ctx.ACTION {
 		m.Action(nfs.SAVE, s.Make, s.Ctags, s.Module)
+	}
+	if len(arg) > 1 && strings.HasPrefix(arg[1], "auto/") {
+		m.Cmdy(nfs.CAT, path.Join(arg[0], arg[1]))
 	}
 	if len(arg) > 1 && arg[1] == "config" {
 		m.Cmdy(nfs.CAT, path.Join(arg[0], arg[1]))

@@ -7,6 +7,7 @@ import (
 
 	"shylinux.com/x/ice"
 	"shylinux.com/x/icebergs/base/cli"
+	"shylinux.com/x/icebergs/base/mdb"
 	"shylinux.com/x/icebergs/base/nfs"
 	"shylinux.com/x/icebergs/base/tcp"
 	"shylinux.com/x/icebergs/base/web"
@@ -20,9 +21,9 @@ const (
 type server struct {
 	ice.Code
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
-	action string `data:"error,test,reload,conf,make"`
-	error  string `name:"error" help:"日志"`
+	action string `data:"test,error,reload,conf,make"`
 	test   string `name:"test path=/" help:"测试"`
+	error  string `name:"error" help:"日志"`
 	reload string `name:"reload" help:"重载"`
 	conf   string `name:"conf" help:"配置"`
 	make   string `name:"make" help:"编译"`
@@ -69,15 +70,19 @@ func (s server) Start(m *ice.Message, arg ...string) {
 }
 func (s server) Stop(m *ice.Message, arg ...string) {
 	s.Code.System(m, m.Option(nfs.DIR), SBIN_NGINX, "-p", nfs.PWD, "-s", "stop")
-	s.Code.Daemon(m, m.Option(nfs.DIR), cli.STOP)
+	m.Option(mdb.HASH, "")
+	s.Code.Daemon(m.Spawn(), m.Option(nfs.DIR), cli.STOP)
 	s.Code.ToastSuccess(m)
 }
 func (s server) Test(m *ice.Message, arg ...string) {
 	m.Echo(html.EscapeString(m.Cmdx(web.SPIDE_GET, kit.Format("http://localhost:%s/%s", m.Option(tcp.PORT), m.Option(nfs.PATH)))))
 }
+func (s server) Error(m *ice.Message, arg ...string) {
+	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), "logs/error.log"))
+}
 func (s server) Reload(m *ice.Message, arg ...string) {
 	s.Code.System(m, m.Option(nfs.DIR), SBIN_NGINX, "-p", nfs.PWD, "-s", "reload")
-	s.Code.ToastSuccess(m)
+	m.ProcessHold(ice.SUCCESS)
 }
 func (s server) Conf(m *ice.Message, arg ...string) {
 	s.Code.Field(m, ice.GetTypeKey(source{}), kit.Simple(m.Option(nfs.DIR)+ice.PS, "conf/nginx.conf", "43"), arg...)
@@ -97,9 +102,6 @@ func (s server) Make(m *ice.Message, arg ...string) {
 
 	s.Code.Toast(m, "启动成功", m.Option(nfs.DIR))
 	m.ProcessRefresh3ms()
-}
-func (s server) Error(m *ice.Message, arg ...string) {
-	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), "logs/error.log"))
 }
 func (s server) List(m *ice.Message, arg ...string) {
 	s.Code.List(m, "", arg...)

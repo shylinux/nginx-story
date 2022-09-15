@@ -1,34 +1,3 @@
-web.code.ctags.chain `
-configure
-	目录
-		--prefix
-		--sbin-path
-		--conf-path
-		--error-log-path
-		--pid-path
-		--lock-path
-		--builddir-path
-		--http-log-path
-		--http-client-body-temp-path
-		--http-proxy-temp-path
-		--http-fastcgi-temp-path
-		--http-uwsgi-temp-path
-		--http-scgi-temp-path
-	编译
-		--with-cc
-		--with-cpp
-		--with-cc-opt
-		--with-ld-opt
-		--with-cpu-opt
-	用户
-		--with-http_ssl_module
-		--with-debug
-		--add-module
-		--group
-		--user
-`
-return
-
 title "nginx"
 refer `
 官网 https://nginx.org

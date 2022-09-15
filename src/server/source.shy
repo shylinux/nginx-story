@@ -5,6 +5,9 @@ https://pan.baidu.com/disk/pdfview?path=%2F%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF%
 `
 
 field "计数" web.code.git.count args `usr/install/nginx-1.19.1/src/`
+
+section "构建"
+field "脚本" web.code.nginx.source args `usr/install/nginx-1.19.1/ configure 1`
 option ctags.path "usr/install/nginx-1.19.1/src/"
 
 web.code.ctags.chain `
@@ -36,6 +39,8 @@ configure
 		--group
 		--user
 `
+
+section "命令"
 web.code.ctags.chain `
 sbin/nginx
 	-h
@@ -53,6 +58,8 @@ sbin/nginx
 	-v
 	-V
 `
+
+section "配置"
 web.code.ctags.chain `
 nginx.conf
 	user
@@ -86,6 +93,7 @@ nginx.conf
 				proxy_pass
 `
 
+section "模块"
 web.code.ctags.chain `
 ngx_http_demo_module:ngx_module_t
 	ngx_http_demo_module_ctx:ngx_http_module_t
@@ -185,6 +193,7 @@ ngx_http_demo_handler
 	NGX_HTTP_NOT_IMPLEMENTED
 `
 
+section "源码"
 web.code.ctags.chain `
 nginx/src/core/
 	数据类型
@@ -192,8 +201,6 @@ nginx/src/core/
 		ngx_string.h
 		ngx_regex.c
 		ngx_regex.h
-		ngx_times.c
-		ngx_times.h
 		ngx_parse.c
 		ngx_parse.h
 		ngx_parse_time.c
@@ -223,17 +230,17 @@ nginx/src/core/
 		ngx_crc32.h
 		ngx_murmurhash.c
 		ngx_murmurhash.h
-	文件与内存
+	内存与文件
+		ngx_palloc.c
+		ngx_palloc.h
+		ngx_buf.c
+		ngx_buf.h
+		ngx_slab.c
+		ngx_slab.h
 		ngx_file.c
 		ngx_file.h
 		ngx_open_file_cache.c
 		ngx_open_file_cache.h
-		ngx_palloc.c
-		ngx_palloc.h
-		ngx_slab.c
-		ngx_slab.h
-		ngx_buf.c
-		ngx_buf.h
 		ngx_log.c
 		ngx_log.h
 		ngx_syslog.c
@@ -265,10 +272,13 @@ nginx/src/core/
 		ngx_module.h
 		ngx_cycle.c
 		ngx_cycle.h
+		ngx_times.c
+		ngx_times.h
 		nginx.c
 		nginx.h
 ` path "usr/install/nginx-1.19.1/src/core/"
 
+section "框架"
 web.code.ctags.chain `
 ngx_cycle:ngx_cycle_t
 	conf_ctx
