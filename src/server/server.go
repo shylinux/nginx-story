@@ -101,7 +101,7 @@ func (s server) Make(m *ice.Message, arg ...string) {
 	m.Sleep("1s")
 
 	s.Code.Toast(m, "启动成功", m.Option(nfs.DIR))
-	m.ProcessRefresh3ms()
+	m.ProcessRefresh()
 }
 func (s server) List(m *ice.Message, arg ...string) {
 	s.Code.List(m, "", arg...)
