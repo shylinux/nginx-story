@@ -3,6 +3,7 @@ package server
 import (
 	"html"
 	"path"
+	"net/http"
 	"strings"
 
 	"shylinux.com/x/ice"
@@ -10,7 +11,6 @@ import (
 	"shylinux.com/x/icebergs/base/mdb"
 	"shylinux.com/x/icebergs/base/nfs"
 	"shylinux.com/x/icebergs/base/tcp"
-	"shylinux.com/x/icebergs/base/web"
 	kit "shylinux.com/x/toolkits"
 )
 
@@ -75,7 +75,7 @@ func (s server) Stop(m *ice.Message, arg ...string) {
 	s.Code.ToastSuccess(m)
 }
 func (s server) Test(m *ice.Message, arg ...string) {
-	m.Echo(html.EscapeString(m.Cmdx(web.SPIDE_GET, kit.Format("http://localhost:%s/%s", m.Option(tcp.PORT), m.Option(nfs.PATH)))))
+	m.Echo(html.EscapeString(m.Cmdx(http.MethodGet, kit.Format("http://localhost:%s/%s", m.Option(tcp.PORT), m.Option(nfs.PATH)))))
 }
 func (s server) Error(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), "logs/error.log"))
