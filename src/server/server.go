@@ -2,6 +2,7 @@ package server
 
 import (
 	"html"
+	"os"
 	"path"
 	"net/http"
 	"strings"
@@ -59,6 +60,7 @@ func (s server) Build(m *ice.Message, arg ...string) {
 }
 func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Start(m, "", SBIN_NGINX, func(p string) []string {
+		os.MkdirAll(path.Join(p, "logs"), ice.MOD_DIR)
 		kit.Rewrite(path.Join(p, "conf/nginx.conf"), func(line string) string {
 			if strings.HasPrefix(strings.TrimSpace(line), "listen") {
 				return strings.Replace(line, kit.Split(line, "\t ", ";")[1], path.Base(p), 1)
@@ -91,20 +93,16 @@ func (s server) Make(m *ice.Message, arg ...string) {
 	s.Code.ToastLong(m, "编译中...", m.Option(nfs.DIR))
 	s.Stream(m, s.Path(m, ""), cli.MAKE, "-j8")
 	s.Stream(m, s.Path(m, ""), cli.MAKE, "install")
-
 	s.Stop(m)
 	s.Code.ToastLong(m, "停止中...", m.Option(nfs.DIR))
 	m.Sleep("3s")
-
 	s.Code.ToastLong(m, "启动中...", m.Option(nfs.DIR))
 	s.Start(m)
 	m.Sleep("1s")
-
 	s.Code.Toast(m, "启动成功", m.Option(nfs.DIR))
 	m.ProcessRefresh()
 }
 func (s server) List(m *ice.Message, arg ...string) {
 	s.Code.List(m, "", arg...)
 }
-
 func init() { ice.CodeModCmd(server{}) }
