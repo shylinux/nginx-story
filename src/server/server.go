@@ -2,9 +2,9 @@ package server
 
 import (
 	"html"
+	"net/http"
 	"os"
 	"path"
-	"net/http"
 	"strings"
 
 	"shylinux.com/x/ice"
@@ -61,7 +61,7 @@ func (s server) Build(m *ice.Message, arg ...string) {
 func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Start(m, "", SBIN_NGINX, func(p string) []string {
 		os.MkdirAll(path.Join(p, "logs"), ice.MOD_DIR)
-		kit.Rewrite(path.Join(p, "conf/nginx.conf"), func(line string) string {
+		nfs.Rewrite(m.Message, path.Join(p, "conf/nginx.conf"), func(line string) string {
 			if strings.HasPrefix(strings.TrimSpace(line), "listen") {
 				return strings.Replace(line, kit.Split(line, "\t ", ";")[1], path.Base(p), 1)
 			}
