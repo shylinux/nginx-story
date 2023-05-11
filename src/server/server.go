@@ -23,6 +23,7 @@ type server struct {
 	ice.Code
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
 	action string `data:"test,error,reload,conf,make"`
+	start  string `name:"start port*=10000" help:"启动"`
 	test   string `name:"test path*=/" help:"测试"`
 	error  string `name:"error" help:"日志"`
 	reload string `name:"reload" help:"重载"`
