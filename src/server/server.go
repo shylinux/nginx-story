@@ -1,10 +1,9 @@
 package server
 
 import (
-	"html"
-	"net/http"
 	"os"
 	"path"
+	"runtime"
 	"strings"
 
 	"shylinux.com/x/ice"
@@ -12,6 +11,7 @@ import (
 	"shylinux.com/x/icebergs/base/mdb"
 	"shylinux.com/x/icebergs/base/nfs"
 	"shylinux.com/x/icebergs/base/tcp"
+	"shylinux.com/x/icebergs/base/web"
 	kit "shylinux.com/x/toolkits"
 )
 
@@ -23,7 +23,7 @@ type server struct {
 	ice.Code
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
 	action string `data:"test,error,reload,conf,make"`
-	test   string `name:"test path=/" help:"测试"`
+	test   string `name:"test path*=/" help:"测试"`
 	error  string `name:"error" help:"日志"`
 	reload string `name:"reload" help:"重载"`
 	conf   string `name:"conf" help:"配置"`
@@ -56,7 +56,11 @@ func (s server) Build(m *ice.Message, arg ...string) {
 	kit.Fetch(m.Configv(source{}, nfs.MODULE), func(key string, value string) {
 		args = append(args, kit.Format("--add-module=%s", kit.Path(value)))
 	})
-	s.Code.Build(m, "", "--with-http_ssl_module", args)
+	if runtime.GOOS == cli.LINUX {
+		s.Code.Build(m, "", "--with-http_ssl_module", args)
+	} else {
+		s.Code.Build(m, "", args)
+	}
 }
 func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Start(m, "", SBIN_NGINX, func(p string) []string {
@@ -77,14 +81,13 @@ func (s server) Stop(m *ice.Message, arg ...string) {
 	s.Code.ToastSuccess(m)
 }
 func (s server) Test(m *ice.Message, arg ...string) {
-	m.Echo(html.EscapeString(m.Cmdx(http.MethodGet, kit.Format("http://localhost:%s/%s", m.Option(tcp.PORT), m.Option(nfs.PATH)))))
+	m.EchoIFrame(kit.Format("http://%s:%s", web.UserWeb(m).Hostname(), m.Option(tcp.PORT)))
 }
 func (s server) Error(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), "logs/error.log"))
 }
 func (s server) Reload(m *ice.Message, arg ...string) {
 	s.Code.System(m, m.Option(nfs.DIR), SBIN_NGINX, "-p", nfs.PWD, "-s", "reload")
-	m.ProcessHold(ice.SUCCESS)
 }
 func (s server) Conf(m *ice.Message, arg ...string) {
 	s.Code.Field(m, ice.GetTypeKey(source{}), kit.Simple(m.Option(nfs.DIR)+ice.PS, "conf/nginx.conf", "43"), arg...)
@@ -102,7 +105,6 @@ func (s server) Make(m *ice.Message, arg ...string) {
 	s.Code.Toast(m, "启动成功", m.Option(nfs.DIR))
 	m.ProcessRefresh()
 }
-func (s server) List(m *ice.Message, arg ...string) {
-	s.Code.List(m, "", arg...)
-}
+func (s server) List(m *ice.Message, arg ...string) { s.Code.List(m, "", arg...) }
+
 func init() { ice.CodeModCmd(server{}) }

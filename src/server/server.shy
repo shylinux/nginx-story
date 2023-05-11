@@ -1,6 +1,5 @@
 chapter "server"
 field web.code.nginx.server
-field web.code.nginx.source
 
 section "编译安装"
 shell `
