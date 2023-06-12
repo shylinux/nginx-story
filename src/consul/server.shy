@@ -1,0 +1,20 @@
+chapter "consul"
+refer `
+官网 https://www.consul.io
+文档 https://developer.hashicorp.com/consul/docs
+源码 https://github.com/hashicorp/consul
+`
+shell `
+wget https://releases.hashicorp.com/consul/1.15.2/consul_1.15.2_linux_amd64.zip
+mkdir -p consul/bin; unzip consul_1.15.2_linux_amd64.zip -d consul/bin && cd consul
+./bin/consul agent -dev
+
+./bin/consul members
+./bin/consul reload
+./bin/consul leave
+`
+refer `
+http://localhost:8500/ui/dc1/services
+`
+field web.code.consul.server
+
