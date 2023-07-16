@@ -1,0 +1,52 @@
+{
+  "0f461b": {
+    "meta": {
+      "icon": "usr/icons/Terminal.png",
+      "index": "web.code.xterm",
+      "name": "Terminal",
+      "time": "2023-07-10 20:37:28.326"
+    }
+  },
+  "30949f": {
+    "meta": {
+      "icon": "usr/icons/vimer.png",
+      "index": "web.code.vimer",
+      "name": "vimer",
+      "time": "2023-07-10 20:37:28.326"
+    }
+  },
+  "3f5ce4": {
+    "meta": {
+      "_target": [],
+      "icon": "/require/usr/icons/go.png",
+      "index": "web.code.compile",
+      "name": "compile",
+      "time": "2023-07-16 14:07:32.582"
+    }
+  },
+  "7075e5": {
+    "meta": {
+      "icon": "usr/icons/Finder.png",
+      "index": "web.chat.macos.finder",
+      "name": "Finder",
+      "time": "2023-07-10 20:37:28.326"
+    }
+  },
+  "730b2e": {
+    "meta": {
+      "_target": [],
+      "icon": "/require/usr/icons/git.jpg",
+      "index": "web.code.git.status",
+      "name": "repos",
+      "time": "2023-07-16 14:07:32.582"
+    }
+  },
+  "dcc20b": {
+    "meta": {
+      "icon": "usr/icons/Safari.png",
+      "index": "web.chat.iframe",
+      "name": "Safari",
+      "time": "2023-07-10 20:37:28.326"
+    }
+  }
+}

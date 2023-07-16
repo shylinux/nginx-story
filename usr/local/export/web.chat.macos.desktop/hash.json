@@ -1,0 +1,35 @@
+{
+  "374494": {
+    "meta": {
+      "args": "month",
+      "icon": "usr/icons/Calendar.png",
+      "index": "web.team.plan",
+      "name": "Calendar",
+      "time": "2023-07-10 20:37:28.325"
+    }
+  },
+  "751d9b": {
+    "meta": {
+      "icon": "usr/icons/Photos.png",
+      "index": "web.wiki.feel",
+      "name": "Photos",
+      "time": "2023-07-10 20:37:28.325"
+    }
+  },
+  "7b0c63": {
+    "meta": {
+      "icon": "usr/icons/Grapher.png",
+      "index": "web.wiki.draw",
+      "name": "Grapher",
+      "time": "2023-07-10 20:37:28.325"
+    }
+  },
+  "9f075b": {
+    "meta": {
+      "icon": "usr/icons/Books.png",
+      "index": "web.wiki.word",
+      "name": "Books",
+      "time": "2023-07-10 20:37:28.325"
+    }
+  }
+}
