@@ -1,52 +1,58 @@
 {
-  "0f461b": {
+  "5bd63f": {
     "meta": {
-      "icon": "usr/icons/Terminal.png",
-      "index": "web.code.xterm",
-      "name": "Terminal",
-      "time": "2023-07-10 20:37:28.326"
-    }
-  },
-  "30949f": {
-    "meta": {
-      "icon": "usr/icons/vimer.png",
-      "index": "web.code.vimer",
-      "name": "vimer",
-      "time": "2023-07-10 20:37:28.326"
-    }
-  },
-  "3f5ce4": {
-    "meta": {
-      "_target": [],
       "icon": "/require/usr/icons/go.png",
       "index": "web.code.compile",
       "name": "compile",
-      "time": "2023-07-16 14:07:32.582"
+      "time": "2023-07-12 10:16:45.614"
     }
   },
-  "7075e5": {
-    "meta": {
-      "icon": "usr/icons/Finder.png",
-      "index": "web.chat.macos.finder",
-      "name": "Finder",
-      "time": "2023-07-10 20:37:28.326"
-    }
-  },
-  "730b2e": {
-    "meta": {
-      "_target": [],
-      "icon": "/require/usr/icons/git.jpg",
-      "index": "web.code.git.status",
-      "name": "repos",
-      "time": "2023-07-16 14:07:32.582"
-    }
-  },
-  "dcc20b": {
+  "7b06e7": {
     "meta": {
       "icon": "usr/icons/Safari.png",
       "index": "web.chat.iframe",
       "name": "Safari",
-      "time": "2023-07-10 20:37:28.326"
+      "time": "2023-05-24 15:32:00.613"
+    }
+  },
+  "955f91": {
+    "meta": {
+      "icon": "/require/usr/icons/Mission Control.png",
+      "index": "web.dream",
+      "name": "dream",
+      "time": "2023-07-12 10:16:45.613"
+    }
+  },
+  "99baca": {
+    "meta": {
+      "icon": "usr/icons/vimer.png",
+      "index": "web.code.vimer",
+      "name": "vimer",
+      "time": "2023-05-24 15:32:00.615"
+    }
+  },
+  "d5df43": {
+    "meta": {
+      "icon": "usr/icons/Finder.png",
+      "index": "web.chat.macos.finder",
+      "name": "Finder",
+      "time": "2023-05-24 15:32:00.612"
+    }
+  },
+  "e615d4": {
+    "meta": {
+      "icon": "usr/icons/Terminal.png",
+      "index": "web.code.xterm",
+      "name": "Terminal",
+      "time": "2023-05-24 15:32:00.614"
+    }
+  },
+  "eac248": {
+    "meta": {
+      "icon": "/require/usr/icons/git.jpg",
+      "index": "web.code.git.status",
+      "name": "status",
+      "time": "2023-07-15 14:31:26.486"
     }
   }
 }

@@ -1,35 +1,35 @@
 {
-  "374494": {
+  "366aa0": {
+    "meta": {
+      "icon": "usr/icons/Books.png",
+      "index": "web.wiki.word",
+      "name": "Books",
+      "time": "2023-05-24 15:32:00.605"
+    }
+  },
+  "63beed": {
+    "meta": {
+      "icon": "usr/icons/Photos.png",
+      "index": "web.wiki.feel",
+      "name": "Photos",
+      "time": "2023-05-24 15:32:00.607"
+    }
+  },
+  "680cac": {
+    "meta": {
+      "icon": "usr/icons/Grapher.png",
+      "index": "web.wiki.draw",
+      "name": "Grapher",
+      "time": "2023-05-24 15:32:00.608"
+    }
+  },
+  "dfd878": {
     "meta": {
       "args": "month",
       "icon": "usr/icons/Calendar.png",
       "index": "web.team.plan",
       "name": "Calendar",
-      "time": "2023-07-10 20:37:28.325"
-    }
-  },
-  "751d9b": {
-    "meta": {
-      "icon": "usr/icons/Photos.png",
-      "index": "web.wiki.feel",
-      "name": "Photos",
-      "time": "2023-07-10 20:37:28.325"
-    }
-  },
-  "7b0c63": {
-    "meta": {
-      "icon": "usr/icons/Grapher.png",
-      "index": "web.wiki.draw",
-      "name": "Grapher",
-      "time": "2023-07-10 20:37:28.325"
-    }
-  },
-  "9f075b": {
-    "meta": {
-      "icon": "usr/icons/Books.png",
-      "index": "web.wiki.word",
-      "name": "Books",
-      "time": "2023-07-10 20:37:28.325"
+      "time": "2023-05-24 15:32:00.609"
     }
   }
 }
