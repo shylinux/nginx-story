@@ -2,8 +2,5 @@
 	config serve meta.main /chat/cmd/desktop
 	config space meta.main desktop
 
-~web.code
-	binpack insert usr/local/export/
-
 ~ssh
 	source local.shy
