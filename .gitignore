@@ -1,5 +1,6 @@
 src/binpack.go
 src/version.go
+etc/conf/cert/
 etc/local.shy
 etc/local.sh
 *.swp
