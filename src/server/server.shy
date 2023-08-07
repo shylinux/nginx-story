@@ -28,15 +28,8 @@ curl localhost
 section "配置文件"
 shell `
 cd usr/local/daemon/10000/
-ln -s ~/contexts/usr/local/work/20230511-nginx-story/etc/conf/
-sudo ./sbin/nginx -p $PWD -s reload
+cp ~/contexts/etc/conf/*.conf conf/
 sudo ./sbin/nginx -p $PWD
+sudo ./sbin/nginx -p $PWD -s reload
 sysctl
-`
-
-section "域名证书"
-refer `
-域名 https://dns.console.aliyun.com/?spm=5176.12818093_-128809398.top-nav.22.225d16d03RxF9y#/dns/domainList
-证书 https://yundun.console.aliyun.com/?spm=5176.12818093_-1363046575.top-nav.15.3be916d0iEE6av&p=cas#/certExtend/free/cn-hangzhou
-主机 https://ecs.console.aliyun.com/home#/
 `
