@@ -77,6 +77,7 @@ func (s configs) List(m *ice.Message, arg ...string) {
 			p := kit.Format(kit.Value(value, kit.Keys(LOCATION, nfs.PS, PROXY_PASS)))
 			m.Push(PROXY_PASS, p).Push(SERVER, kit.Format(kit.Value(conf, kit.Keys(HTTP, UPSTREAM, strings.TrimPrefix(p, "http://"), SERVER))))
 		})
+		m.PushAction(s.Open)
 		m.Echo(kit.Formats(conf)).StatusTime(stats)
 		ctx.DisplayStoryJSON(m)
 		return
@@ -96,6 +97,14 @@ func (s configs) List(m *ice.Message, arg ...string) {
 	} else {
 		m.EchoIFrame(p + arg[1])
 		m.StatusTimeCount(tcp.HOST, p+arg[1])
+	}
+}
+func (s configs) Open(m *ice.Message, arg ...string) {
+	switch m.Option(LISTEN) {
+	case "443 ssl":
+		m.ProcessOpen(kit.Format("https://%s", m.Option("name")))
+	case "80":
+		m.ProcessOpen(kit.Format("http://%s", m.Option("name")))
 	}
 }
 func init() { ice.CodeModCmd(configs{}) }
