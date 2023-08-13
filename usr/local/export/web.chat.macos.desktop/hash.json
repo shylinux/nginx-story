@@ -24,6 +24,15 @@
       "time": "2023-07-31 18:37:53.791"
     }
   },
+  "def685": {
+    "meta": {
+      "_target": [],
+      "icon": "/require/src/server/nginx.jpeg",
+      "index": "web.code.nginx.configs",
+      "name": "configs",
+      "time": "2023-08-12 08:10:26.911"
+    }
+  },
   "f35bef": {
     "meta": {
       "icon": "usr/icons/Books.png",
