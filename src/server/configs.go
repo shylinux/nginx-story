@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"shylinux.com/x/ice"
-	"shylinux.com/x/icebergs/base/ctx"
 	"shylinux.com/x/icebergs/base/lex"
 	"shylinux.com/x/icebergs/base/mdb"
 	"shylinux.com/x/icebergs/base/nfs"
@@ -85,11 +84,12 @@ func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
 			if stats[status]++; status == "online" {
 				m.PushButton(s.Open)
 			} else {
-				m.PushButton("")
+				m.PushButton(s.Open)
 			}
 		})
-		m.Action(s.Create).Echo(kit.Formats(conf)).StatusTime(stats)
-		ctx.DisplayStoryJSON(m)
+		m.Action(s.Create).StatusTime(stats)
+		// m.Echo(kit.Formats(conf))
+		// ctx.DisplayStoryJSON(m)
 		return m
 	}
 	server := kit.Value(conf, kit.Keys(HTTP, SERVER, arg[0])).(ice.Map)
