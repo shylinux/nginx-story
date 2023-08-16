@@ -10,7 +10,7 @@ wget http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz
 tar xvf nginx-1.19.1.tar.gz && cd nginx-1.19.1
 
 ./configure --prefix=$PWD/_install
-./configure --prefix=$PWD/_install --with-http_ssl_module --with-http_v2_module
+./configure --prefix=$PWD/_install --with-http_ssl_module --with-http_v2_module --with-http_auth_request_module
 make -j8 && make install
 `
 
@@ -35,4 +35,13 @@ ln -s ~/contexts/usr/local/work/20230511-nginx-story/etc/conf/
 sudo ./sbin/nginx -p $PWD
 sudo ./sbin/nginx -p $PWD -s reload
 sysctl
+`
+section "basic auth"
+shell `
+sudo yum -y install httpd-tools
+htpasswd -c ./ip_passwdfile username
+`
+spark inner `
+auth_basic "请输入账号密码";
+auth_basic_user_file /tmp/ip_passwdfile;
 `
