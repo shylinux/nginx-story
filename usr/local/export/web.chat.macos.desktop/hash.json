@@ -1,4 +1,13 @@
 {
+  "380e5d": {
+    "meta": {
+      "_target": [],
+      "icon": "/require/src/studio/studio.png",
+      "index": "web.code.nginx.studio",
+      "name": "nginx",
+      "time": "2023-08-26 18:34:45.599"
+    }
+  },
   "468a77": {
     "meta": {
       "icon": "usr/icons/Grapher.png",
