@@ -34,7 +34,7 @@ type configs struct {
 	path   string `data:"etc/conf/"`
 	file   string `data:"nginx.conf"`
 	create string `name:"create name* https=yes,no upstream* server*"`
-	list   string `name:"list index path auto" help:"服务配置"`
+	list   string `name:"list index path auto" help:"服务配置" icon:"nginx.png"`
 }
 
 func (s configs) Search(m *ice.Message, arg ...string) {
