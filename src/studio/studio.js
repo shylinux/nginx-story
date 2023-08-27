@@ -46,7 +46,7 @@ Volcanos(chat.ONIMPORT, {
 			return {name: key, show: function(event, target) { can.onimport._response(can, target, can.db.msg, key) }}
 		}), [{name: ctx.DISPLAY, show: function(event, target) {
 			var msg = can.onexport.request(event, can), display = can.core.Value(can.base.Obj(msg.Option(ctx.CONFIG)), ctx.DISPLAY)
-			return can.onappend.plugin(can, {index: web.CODE_INNER, args: [display, lex.SP], style: html.OUTPUT}, function(sub) {}, target)
+			return can.onappend.plugin(can, {index: web.CODE_INNER, args: [display||"/volcanos/plugin/story/json.js", lex.SP], style: html.OUTPUT}, function(sub) {}, target)
 		}}]), can.ui.content, [{type: html.BUTTON, value: REQUEST, style: html.NOTICE}])
 	},
 	_part: function(can, name, list, target, action) {
@@ -77,7 +77,7 @@ Volcanos(chat.ONIMPORT, {
 	},
 	_response: function(can, target, msg, type) { var _msg = can.request()
 		msg.Table(function(value) { if (value.type == type) { _msg.Push(mdb.NAME, value.name), _msg.Push(mdb.VALUE, value.value) } })
-		can.onappend.table(can, _msg, null, target)
+		can.onappend.style(can, type, can.onappend.table(can, _msg, null, target))
 	},
 	_plugin: function(can, target) {
 		var msg = can.onexport.request({}, can), display = can.core.Value(can.base.Obj(msg.Option(ctx.CONFIG)), ctx.DISPLAY)
@@ -88,7 +88,7 @@ Volcanos(chat.ONIMPORT, {
 				}, target)
 			}
 			switch (can.core.Split(value.value, ";")[0]) {
-				case mime.ApplicationJSON: can.onappend._output(can, can.db.msg, "/plugin/story/json.js", target, false); break
+				case mime.ApplicationJSON: can.onappend._output(can, can.db.msg, "/plugin/story/json.js", null, target, null, false); break
 				default: can.onappend.table(can, can.db.msg, null, target), can.onappend.board(can, can.db.msg, target)
 			}
 		} }) 
