@@ -2,6 +2,8 @@ chapter "studio"
 refer `
 apifox https://app.apifox.com/project/433873/
 rfc7231 https://datatracker.ietf.org/doc/html/rfc7231
-rfc7231 https://www.cnblogs.com/schaepher/p/12831623.html
+http https://www.cnblogs.com/schaepher/p/12831623.html
+rfc7235 https://datatracker.ietf.org/doc/html/rfc7235
+auth https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication
 `
 field web.code.nginx.studio
