@@ -1,10 +1,10 @@
 fieldset.web.code.nginx.studio input { min-width:80px; }
+fieldset.web.code.nginx.studio>div.output>div.project div.item { margin:10px 0; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content { padding:20px; display:flex; flex-direction:column; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action { width:100%; display:flex; flex-shrink:0; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action input { border:var(--box-border); height:32px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action input:focus { border:var(--box-notice); }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item { height:32px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item.method input { translate:1px -1px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item.url { flex-grow:1; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item.url>input { width:100%; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title { border-bottom:var(--box-border); display:flex; align-items:flex-end; }
@@ -18,15 +18,16 @@ fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content col.description { width:320px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content th { border:var(--box-border); box-shadow:none; height:32px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td { padding:0; border:0; height:32px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td>input { height:100%; width:100%; border:var(--box-border); }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td>input:focus { border:var(--box-notice); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text { width:100%; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text span { font-size:26px; padding:0 5px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td input { width:100%; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response { margin-top:20px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.action { display:flex; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.action>div { text-align:center; padding:10px; min-width:80px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.action>div.select { border-bottom:var(--notice-bg-color) solid 2px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content { white-space:pre; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content th { border:var(--box-border); box-shadow:none; height:32px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content>table td { padding:0; border:0; height:32px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content>table td { border:0; height:32px; }
 body {
 	--request-GET:var(--ui-green-base);
 	--request-PUT:var(--ui-blue-base);

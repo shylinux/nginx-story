@@ -16,7 +16,7 @@ Volcanos(chat.ONIMPORT, {
 					if (can.onmotion.cache(can, function(save, load) {
 						save({msg: can.db.msg, request: can.ui.request, response: can.ui.response})
 						return load(value.hash, function(bak) { can.db.msg = bak.msg, can.ui.request = bak.request, can.ui.response = bak.response })
-					}, can.ui.content)) { return can.onimport.layout(can) }
+					}, can.ui.content)) { return can.onimport.layout(can), _target.click() }
 					can.onimport._content(can, value), can.onimport.layout(can)
 				}, function(event) { delete(can.ui.content._cache[value.hash])
 					can.onmotion.delay(can, function() { can.onexport.tabs(can) })
@@ -31,7 +31,7 @@ Volcanos(chat.ONIMPORT, {
 		can.page.Append(can, can.ui.content, [
 			{view: html.ACTION, _init: function(target) { can.onappend._action(can, [
 				{type: html.SELECT, name: METHOD, value: value.method, values: [web.GET, web.PUT, web.POST, web.DELETE]},
-				{type: html.INPUT, name: web.URL, value: value.url, action: "key"},
+				{type: html.TEXT, name: web.URL, value: value.url, action: "key"},
 				{type: html.BUTTON, value: REQUEST, style: html.NOTICE},
 				{type: html.BUTTON, value: nfs.SAVE},
 			], target) }},
@@ -66,14 +66,16 @@ Volcanos(chat.ONIMPORT, {
 	_table: function(can, target, value, _key, keys) { var msg = can.request(); keys = keys || [mdb.NAME, mdb.VALUE, "description"]
 		can.core.Item(can.base.Obj(value[_key]), function(key, value) { msg.Push(mdb.NAME, key), msg.Push(mdb.VALUE, value) })
 		can.core.List(keys, function(key) { msg.Push(key, "") })
-		function add(value, key) { return {type: html.TD, list: [{type: html.INPUT, value: value, _init: function(target) {
-			can.onappend.figure(can, {run: function(event, cmds, cb) { var msg = can.request(event, {action: _key})
-				can.page.Select(can, target.parentNode.parentNode, html.INPUT, function(target, index) { msg.Option(keys[index], target.value) })
-				can.run(event, [ctx.ACTION, mdb.INPUTS, key], cb)
-			}, _enter: function() {
-				can.page.Append(can, table, [{type: html.TR, list: can.core.List(keys, function(key) { return add("", key) }) }])
-			}}, target, function(sub, value) {})
-		}}]} } var table = can.onappend.table(can, msg, add, target); return table
+		function add(value, key) { return {type: html.TD, _init: function(target) {
+			can.onappend._action(can, [{type: html.TEXT, name: key, value: value, _init: function(target) {
+				can.onappend.figure(can, {name: key, run: function(event, cmds, cb) { var msg = can.request(event, {action: _key})
+					can.page.Select(can, target.parentNode.parentNode.parentNode, html.INPUT, function(target, index) { msg.Option(keys[index], target.value) })
+					can.run(event, [ctx.ACTION, mdb.INPUTS, key], cb)
+				}, _enter: function() {
+					can.page.Append(can, table, [{type: html.TR, list: can.core.List(keys, function(key) { return add("", key) }) }])
+				}}, target, function(sub, value) {})
+			}}], target)
+		}, list: []} } var table = can.onappend.table(can, msg, add, target); return table
 	},
 	_response: function(can, target, msg, type) { var _msg = can.request()
 		msg.Table(function(value) { if (value.type == type) { _msg.Push(mdb.NAME, value.name), _msg.Push(mdb.VALUE, value.value) } })
