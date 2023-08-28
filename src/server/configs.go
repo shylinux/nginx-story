@@ -87,6 +87,7 @@ func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
 				m.PushButton(s.Open)
 			}
 		})
+		m.Sort("status,name", "str_r", "str")
 		m.Action(s.Create).StatusTime(stats)
 		// m.Echo(kit.Formats(conf))
 		// ctx.DisplayStoryJSON(m)

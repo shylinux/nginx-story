@@ -27,10 +27,13 @@ const (
 type studio struct {
 	ice.Code
 	ice.Hash
-	field string `data:"time,hash,name,description,method,url,type,params,header,cookie,auth,config"`
-	list  string `name:"list env@key list" help:"接口测试" icon:"studio.png"`
+	field  string `data:"time,hash,name,description,method,url,type,params,header,cookie,auth,config"`
+	create string `name:"create name* description method* url*"`
+	list   string `name:"list env@key list" help:"接口测试" icon:"studio.png"`
 }
 
+func (s studio) Init(m *ice.Message, arg ...string) { s.Hash.Import(m) }
+func (s studio) Exit(m *ice.Message, arg ...string) { s.Hash.Export(m) }
 func (s studio) Inputs(m *ice.Message, arg ...string) {
 	switch m.Option(ctx.ACTION) {
 	case ENV:
