@@ -7,3 +7,27 @@ rfc7235 https://datatracker.ietf.org/doc/html/rfc7235
 auth https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication
 `
 field web.code.nginx.studio
+
+section "xterm"
+refer `
+`
+
+section "tinymce"
+refer `
+官网 https://www.tiny.cloud/
+文档 https://www.tiny.cloud/docs/tinymce/6/editor-important-options/
+`
+section "monoca-editor"
+refer `
+官网 https://microsoft.github.io/monaco-editor/
+教程 https://zhuanlan.zhihu.com/p/88828576
+教程 https://juejin.cn/post/6934153579900960782
+`
+section "bootstrap-icons"
+refer `
+官网 https://icons.getbootstrap.com/
+`
+section "echarts"
+refer `
+https://echarts.apache.org/zh/index.html
+`

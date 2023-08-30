@@ -14,14 +14,15 @@ import (
 )
 
 const (
-	ENV    = "env"
-	URL    = "url"
-	METHOD = "method"
-	PARAMS = "params"
-	HEADER = "header"
-	COOKIE = "cookie"
-	CONFIG = "config"
-	AUTH   = "auth"
+	ENV         = "env"
+	URL         = "url"
+	METHOD      = "method"
+	DESCRIPTION = "description"
+	PARAMS      = "params"
+	HEADER      = "header"
+	COOKIE      = "cookie"
+	CONFIG      = "config"
+	AUTH        = "auth"
 )
 
 type studio struct {
@@ -70,7 +71,7 @@ func (s studio) Request(m *ice.Message, arg ...string) {
 	m.Render(ice.RENDER_RAW)
 }
 func (s studio) Save(m *ice.Message, arg ...string) {
-	s.Hash.Modify(m, m.OptionSimple(mdb.HASH, PARAMS, HEADER, COOKIE, AUTH, CONFIG)...)
+	s.Hash.Modify(m, m.OptionSimple(mdb.HASH, METHOD, URL, DESCRIPTION, PARAMS, HEADER, COOKIE, AUTH, CONFIG)...)
 }
 func (s studio) List(m *ice.Message, arg ...string) {
 	s.Hash.List(m).Action(s.Create).PushAction(s.Remove).Display("")

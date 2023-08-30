@@ -10,6 +10,7 @@ fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title { border-bottom:var(--box-border); display:flex; align-items:flex-end; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title>span { font-size:24px; font-style:italic; padding-bottom:5px; margin:0 20px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title input { border:var(--box-border); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>fieldset.can.editor { margin-top:20px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request { margin-top:20px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.action { display:flex; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.action>div { text-align:center; padding:10px; min-width:80px; }
@@ -19,7 +20,7 @@ fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content th { border:var(--box-border); box-shadow:none; height:32px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td { padding:0; border:0; height:32px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text { width:100%; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text span { font-size:26px; padding:0 5px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text span { font-size:26px; line-height:30px; padding:0 5px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td input { width:100%; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response { margin-top:20px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.action { display:flex; }
