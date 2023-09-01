@@ -10,6 +10,7 @@ field web.code.nginx.studio
 
 section "xterm"
 refer `
+官网 https://xtermjs.org/
 `
 
 section "tinymce"

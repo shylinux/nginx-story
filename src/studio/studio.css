@@ -1,5 +1,7 @@
 fieldset.web.code.nginx.studio input { min-width:80px; }
-fieldset.web.code.nginx.studio>div.output>div.project div.item { margin:10px 0; }
+fieldset.web.code.nginx.studio>div.output>div.project div.item:not(.text) { line-height:32px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.display:not(.select) { display:none; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.profile:not(.select) { display:none; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content { padding:20px; display:flex; flex-direction:column; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action { width:100%; display:flex; flex-shrink:0; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action input { border:var(--box-border); height:32px; }
