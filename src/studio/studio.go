@@ -30,6 +30,7 @@ type studio struct {
 	ice.Code
 	ice.Hash
 	field  string `data:"time,hash,name,method,url,params,header,cookie,auth,config"`
+	tools  string `data:"web.spide"`
 	create string `name:"create name* method* url*"`
 	list   string `name:"list env@key list" help:"接口测试" icon:"studio.png"`
 }
@@ -69,10 +70,12 @@ func (s studio) Inputs(m *ice.Message, arg ...string) {
 }
 func (s studio) Request(m *ice.Message, arg ...string) {
 	args, header := []string{}, kit.UnMarshal(m.Option(HEADER))
-	if strings.HasPrefix(kit.Format(kit.Value(header, "Content-Type")), "application/json") {
-		args = append(args, web.SPIDE_JSON)
-	} else {
-		args = append(args, web.SPIDE_FORM)
+	if m.Option(METHOD) != http.MethodGet {
+		if strings.HasPrefix(kit.Format(kit.Value(header, "Content-Type")), "application/json") {
+			args = append(args, web.SPIDE_JSON)
+		} else {
+			args = append(args, web.SPIDE_FORM)
+		}
 	}
 	kit.For(kit.UnMarshal(m.Option(PARAMS)), func(key string, value string) { args = append(args, key, value) })
 	kit.For(kit.UnMarshal(m.Option(AUTH)), func(key, value string) { kit.Value(header, web.Authorization, key+lex.SP+value) })
@@ -83,7 +86,7 @@ func (s studio) Save(m *ice.Message, arg ...string) {
 	s.Hash.Modify(m, m.OptionSimple(mdb.HASH, METHOD, URL, PARAMS, HEADER, COOKIE, AUTH, CONFIG)...)
 }
 func (s studio) List(m *ice.Message, arg ...string) {
-	s.Hash.List(m).Action(s.Create).PushAction(s.Remove).Display("")
+	s.Hash.List(m).PushAction(s.Remove).Action(s.Create).Display("")
 }
 
 func init() { ice.CodeModCmd(studio{}) }

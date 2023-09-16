@@ -57,16 +57,18 @@ Volcanos(chat.ONIMPORT, {
 			return {name: key, show: function(event, target) { can.onimport._response(can, target, can.db.msg, key) }}
 		})), can.ui.content, [{type: html.BUTTON, value: REQUEST, style: html.NOTICE}])
 	},
-	_profile: function(can, value, target) {
+	_profile: function(can, value, target) { value._profile = target
+		return
 		can.onappend.plugin(can, {
 			index: web.CODE_VIMER, args: can.onexport._args(can, html.PROFILE), display: PLUGIN_STORY_EDITOR, style: html.OUTPUT,
 			height: can.ConfHeight(), width: (can.ConfWidth()-can.ui.project.offsetWidth)/2,
-		}, function(sub) { target._plugin = sub }, value._profile = target)
+		}, function(sub) { target._plugin = sub }, target)
 	},
-	_display: function(can, value, target) {
+	_display: function(can, value, target) { value._display = target
+		return
 		can.onappend.plugin(can, {
 			index: web.CODE_VIMER, args: can.onexport._args(can, html.DISPLAY), display: PLUGIN_STORY_MONACO, style: html.OUTPUT,
-		}, function(sub) { target._plugin = sub }, value._display = target)
+		}, function(sub) { target._plugin = sub }, target)
 	},
 	_part: function(can, name, list, target, action) {
 		var ui = can.page.Append(can, target, [
@@ -140,7 +142,11 @@ Volcanos(chat.ONACTION, {
 	request: function(event, can, button) { can.runAction(can.onexport.request(event, can), button, [], function(msg) {
 		delete(can.ui.response.content._cache), delete(can.ui.response.content._cache_key)
 		can.db.msg = msg, can.page.SelectOne(can, can.ui.response.action, "").click()
-		can.user.toastSuccess(can)
+		if (msg.IsErr()) {
+			can.user.toastFailure(can, msg.Result())
+		} else {
+			can.user.toastSuccess(can)
+		}
 	}) },
 	profile: function(event, can, button) { can.onmotion.toggle(can, can.ui.profile), can.onimport.layout(can) },
 	display: function(event, can, button) { can.onmotion.toggle(can, can.ui.display), can.onimport.layout(can) },
