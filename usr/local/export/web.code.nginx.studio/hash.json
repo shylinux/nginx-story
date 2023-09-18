@@ -1,77 +1,43 @@
 {
-  "577366": {
+  "12ca5b": {
     "meta": {
       "_target": [],
-      "method": "POST",
-      "name": "激活用户",
-      "time": "2023-08-28 17:51:45.633",
-      "url": "/api/user/enable"
-    }
-  },
-  "60a2ad": {
-    "meta": {
-      "_target": [],
-      "auth": "{\"Bearer\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6ImRlbW8iLCJpc3MiOiJhdXRoIiwiZXhwIjoxNjk0ODc2NjcxfQ.hzROMATEN8gDxxK2mBhLHFg9WKRFzNQtV9NI5vvuv-8\"}",
-      "config": "{}",
-      "cookie": "{}",
-      "header": "{}",
-      "method": "GET",
-      "name": "用户列表",
-      "params": "{\"key\":\"username\",\"value\":\"demo\"}",
-      "time": "2023-08-27 21:56:26.511",
-      "url": "http://localhost:8090/api/user.UserService/List"
-    }
-  },
-  "653938": {
-    "meta": {
-      "_target": [],
-      "auth": "{}",
-      "config": "{\"profile\":\"add.html\"}",
-      "cookie": "{}",
-      "header": "{}",
       "method": "PUT",
       "name": "添加用户",
-      "params": "{}",
-      "time": "2023-08-28 17:50:59.334",
+      "time": "2023-08-27 01:48:47.128",
       "url": "/api/user/add"
     }
   },
-  "6c9490": {
+  "135622": {
     "meta": {
       "_target": [],
-      "auth": "{}",
-      "config": "{\"display\":\"metrics.js\",\"profile\":\"metrics.html\"}",
-      "cookie": "{}",
-      "description": "\u003ctable style=\"border-collapse: collapse; width: 100%;\" border=\"1\"\u003e\u003ccolgroup\u003e\u003ccol style=\"width: 16.6256%;\"\u003e\u003ccol style=\"width: 16.6256%;\"\u003e\u003ccol style=\"width: 16.6256%;\"\u003e\u003ccol style=\"width: 16.6256%;\"\u003e\u003ccol style=\"width: 16.6256%;\"\u003e\u003ccol style=\"width: 16.6256%;\"\u003e\u003c/colgroup\u003e\n\u003ctbody\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003ctd\u003e\u0026nbsp;\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\n\u003c/table\u003e",
-      "header": "{\"Content-Type\":\"application/json\"}",
-      "method": "GET",
-      "name": "metrics",
-      "params": "{\"userID\":\"123\"}",
-      "time": "2023-08-27 21:57:04.606",
-      "url": "https://2023.shylinux.com/metrics"
-    }
-  },
-  "c79115": {
-    "meta": {
-      "_target": [],
-      "auth": "{\"Basic\":\"\"}",
-      "config": "{\"display\":\"metrics.js\",\"profile\":\"metrics.html\"}",
-      "cookie": "{\"sessid\":\"\"}",
-      "header": "{\"Content-Type\":\"application/x-www-form-urlencoded\"}",
       "method": "POST",
-      "name": "metrics2",
-      "params": "{\"userID\":\"123\"}",
-      "time": "2023-08-31 19:29:32.242",
-      "url": "https://2023.shylinux.com/metrics"
+      "name": "禁用用户",
+      "time": "2023-08-27 01:49:38.938",
+      "url": "/api/user/disable"
     }
   },
-  "fb11c5": {
+  "1c13f1": {
     "meta": {
       "_target": [],
       "method": "DELETE",
       "name": "删除用户",
-      "time": "2023-08-28 17:51:19.832",
-      "url": "/api/user/delete"
+      "time": "2023-08-27 01:49:12.218",
+      "url": "/api/user/del"
+    }
+  },
+  "43bc62": {
+    "meta": {
+      "_target": [],
+      "auth": "{}",
+      "config": "{\"display\":\"metrics.js\"}",
+      "cookie": "{\"sessid\":\"123\"}",
+      "header": "{\"Content-Type\":\"application/json\"}",
+      "method": "GET",
+      "name": "metrics",
+      "params": "{\"userID\":\"123\"}",
+      "time": "2023-08-27 00:19:24.381",
+      "url": "https://2023.shylinux.com/metrics"
     }
   }
 }
