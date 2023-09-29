@@ -47,7 +47,7 @@ func (s studio) Inputs(m *ice.Message, arg ...string) {
 		} else if arg[0] == mdb.VALUE {
 			switch m.Option(mdb.NAME) {
 			case html.PROFILE, html.DISPLAY:
-				m.Cmd(nfs.DIR, "", mdb.NAME, kit.Dict(nfs.DIR_ROOT, nfs.TemplatePath(m, CONFIG, m.Option(mdb.NAME)))).Table(func(value ice.Maps) { m.Push(arg[0], value[mdb.NAME]) })
+				m.Cmd(nfs.DIR, "", mdb.NAME, kit.Dict(nfs.DIR_ROOT, nfs.TemplatePath(m.Message, CONFIG, m.Option(mdb.NAME)))).Table(func(value ice.Maps) { m.Push(arg[0], value[mdb.NAME]) })
 				m.Push(arg[0], kit.ExtChange(path.Base(m.Option(URL)), kit.Select(nfs.HTML, nfs.JS, m.Option(mdb.NAME) == html.DISPLAY)))
 			case ctx.INDEX, ctx.ARGS:
 				s.Hash.Inputs(m, m.Option(mdb.NAME))
@@ -57,9 +57,9 @@ func (s studio) Inputs(m *ice.Message, arg ...string) {
 	case PARAMS, HEADER, COOKIE, AUTH:
 		switch arg[0] {
 		case mdb.NAME:
-			m.Cmdy(nfs.DIR, "", mdb.NAME, kit.Dict(nfs.DIR_ROOT, nfs.TemplatePath(m, m.Option(ctx.ACTION))))
+			m.Cmdy(nfs.DIR, "", mdb.NAME, kit.Dict(nfs.DIR_ROOT, nfs.TemplatePath(m.Message, m.Option(ctx.ACTION))))
 		case mdb.VALUE:
-			m.Push(arg[0], kit.Filters(strings.Split(m.Cmdx(nfs.CAT, m.Option(mdb.NAME), kit.Dict(nfs.DIR_ROOT, nfs.TemplatePath(m, m.Option(ctx.ACTION)))), lex.NL), ""))
+			m.Push(arg[0], kit.Filters(strings.Split(m.Cmdx(nfs.CAT, m.Option(mdb.NAME), kit.Dict(nfs.DIR_ROOT, nfs.TemplatePath(m.Message, m.Option(ctx.ACTION)))), lex.NL), ""))
 		}
 	default:
 		switch s.Hash.Inputs(m, arg...); arg[0] {

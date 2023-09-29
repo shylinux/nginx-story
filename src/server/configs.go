@@ -64,9 +64,9 @@ func (s configs) Inputs(m *ice.Message, arg ...string) {
 }
 func (s configs) Create(m *ice.Message, arg ...string) {
 	// m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(mdb.NAME)+_CONF), nfs.Template(m, kit.Select(SERVER+_CONF, "servers.conf", m.Option(CERT) != "")))
-	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(mdb.NAME)+_CONF), nfs.Template(m, kit.Select(SERVER+_CONF, "servers.conf", m.Option("https") == "yes")))
-	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), LOCATION, m.Option(UPSTREAM)+_CONF), nfs.Template(m, LOCATION+_CONF))
-	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), UPSTREAM, m.Option(UPSTREAM)+_CONF), nfs.Template(m, UPSTREAM+_CONF))
+	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(mdb.NAME)+_CONF), nfs.Template(m.Message, kit.Select(SERVER+_CONF, "servers.conf", m.Option("https") == "yes")))
+	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), LOCATION, m.Option(UPSTREAM)+_CONF), nfs.Template(m.Message, LOCATION+_CONF))
+	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), UPSTREAM, m.Option(UPSTREAM)+_CONF), nfs.Template(m.Message, UPSTREAM+_CONF))
 }
 func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
 	stats := map[string]int{}
