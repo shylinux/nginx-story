@@ -17,7 +17,6 @@
   },
   "85293e": {
     "meta": {
-      "_target": [],
       "icon": "/require/usr/icons/git.png?pod=20230511-nginx-story",
       "index": "web.code.git.status",
       "name": "status",

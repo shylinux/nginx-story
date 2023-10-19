@@ -39,5 +39,55 @@
       "time": "2023-08-27 00:19:24.381",
       "url": "https://2023.shylinux.com/metrics"
     }
+  },
+  "577366": {
+    "meta": {
+      "_target": [],
+      "method": "POST",
+      "name": "激活用户",
+      "time": "2023-08-28 17:51:45.633",
+      "url": "/api/user/enable"
+    }
+  },
+  "60a2ad": {
+    "meta": {
+      "_target": [],
+      "method": "GET",
+      "name": "用户列表",
+      "time": "2023-08-27 21:56:26.511",
+      "url": "/api/user/list"
+    }
+  },
+  "653938": {
+    "meta": {
+      "_target": [],
+      "method": "PUT",
+      "name": "添加用户",
+      "time": "2023-08-28 17:50:59.334",
+      "url": "/api/user/add"
+    }
+  },
+  "6c9490": {
+    "meta": {
+      "_target": [],
+      "auth": "{}",
+      "config": "{\"display\":\"/require/src/template/web.code.nginx.studio/config/display/metrics.js?pod=20230511-nginx-story\"}",
+      "cookie": "{}",
+      "header": "{}",
+      "method": "GET",
+      "name": "metrics",
+      "params": "{}",
+      "time": "2023-08-27 21:57:04.606",
+      "url": "https://2023.shylinux.com/metrics"
+    }
+  },
+  "fb11c5": {
+    "meta": {
+      "_target": [],
+      "method": "DELETE",
+      "name": "删除用户",
+      "time": "2023-08-28 17:51:19.832",
+      "url": "/api/user/delete"
+    }
   }
 }

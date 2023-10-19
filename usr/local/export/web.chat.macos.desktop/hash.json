@@ -1,7 +1,6 @@
 {
   "380e5d": {
     "meta": {
-      "_target": [],
       "icon": "/require/src/studio/studio.png",
       "index": "web.code.nginx.studio",
       "name": "nginx",
@@ -18,7 +17,6 @@
   },
   "70260b": {
     "meta": {
-      "_target": [],
       "icon": "/require/src/server/nginx.png",
       "index": "web.code.nginx.configs",
       "name": "configs",
@@ -44,7 +42,6 @@
   },
   "def685": {
     "meta": {
-      "_target": [],
       "icon": "/require/src/server/nginx.jpeg",
       "index": "web.code.nginx.configs",
       "name": "configs",

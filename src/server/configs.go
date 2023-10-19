@@ -63,7 +63,6 @@ func (s configs) Inputs(m *ice.Message, arg ...string) {
 	}
 }
 func (s configs) Create(m *ice.Message, arg ...string) {
-	// m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(mdb.NAME)+_CONF), nfs.Template(m, kit.Select(SERVER+_CONF, "servers.conf", m.Option(CERT) != "")))
 	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(mdb.NAME)+_CONF), nfs.Template(m.Message, kit.Select(SERVER+_CONF, "servers.conf", m.Option("https") == "yes")))
 	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), LOCATION, m.Option(UPSTREAM)+_CONF), nfs.Template(m.Message, LOCATION+_CONF))
 	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), UPSTREAM, m.Option(UPSTREAM)+_CONF), nfs.Template(m.Message, UPSTREAM+_CONF))
@@ -75,22 +74,15 @@ func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
 		list := map[string]bool{}
 		m.Cmd(tcp.PORT, mdb.INPUTS, SERVER, func(value ice.Maps) { list[value[SERVER]] = true })
 		kit.For(kit.Value(conf, kit.Keys(HTTP, SERVER)), func(index int, value ice.Map) {
-			m.Push(mdb.INDEX, index).Push(mdb.NAME, kit.Format(value[SERVER_NAME]))
-			m.Push(LISTEN, kit.Format(value[LISTEN]))
+			m.Push(mdb.INDEX, index).Push(mdb.NAME, kit.Format(value[SERVER_NAME])).Push(LISTEN, kit.Format(value[LISTEN]))
 			p := kit.Format(kit.Value(value, kit.Keys(LOCATION, nfs.PS, PROXY_PASS)))
 			server := kit.Format(kit.Value(conf, kit.Keys(HTTP, UPSTREAM, strings.TrimPrefix(p, "http://"), SERVER)))
 			status := kit.Select("online", "offline", !list[server] && strings.HasPrefix(server, "127.0.0.1"))
 			m.Push(PROXY_PASS, p).Push(SERVER, server).Push(mdb.STATUS, status)
-			if stats[status]++; status == "online" {
-				m.PushButton(s.Open)
-			} else {
-				m.PushButton(s.Open)
-			}
+			m.PushButton(s.Open)
+			stats[status]++
 		})
-		m.Sort("status,name", "str_r", "str")
-		m.Action(s.Create).StatusTime(stats)
-		// m.Echo(kit.Formats(conf))
-		// ctx.DisplayStoryJSON(m)
+		m.Sort("status,name", "str_r", "str").Action(s.Create).StatusTime(stats)
 		return m
 	}
 	server := kit.Value(conf, kit.Keys(HTTP, SERVER, arg[0])).(ice.Map)
@@ -100,8 +92,7 @@ func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
 		})
 		m.StatusTimeCount(tcp.HOST, p)
 	} else {
-		m.EchoIFrame(p + arg[1])
-		m.StatusTimeCount(tcp.HOST, p+arg[1])
+		m.EchoIFrame(p+arg[1]).StatusTimeCount(tcp.HOST, p+arg[1])
 	}
 	return m
 }
