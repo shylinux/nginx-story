@@ -58,7 +58,7 @@ func (s server) Build(m *ice.Message, arg ...string) {
 		args = append(args, kit.Format("--add-module=%s", kit.Path(value)))
 	})
 	if runtime.GOOS == cli.LINUX {
-		s.Code.Build(m, "", "--with-http_ssl_module", "--with-http_v2_module", args)
+		s.Code.Build(m, "", "--with-http_ssl_module", "--with-http_v2_module", "--with-http_auth_request_module", args)
 	} else {
 		s.Code.Build(m, "", "--with-http_v2_module", args)
 	}
