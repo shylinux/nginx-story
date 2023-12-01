@@ -9,15 +9,16 @@ yum install -y pcre-devel.x86_64 zlib-devel.x86_64 openssl-devel.x86_64
 wget http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz
 tar xvf nginx-1.19.1.tar.gz && cd nginx-1.19.1
 
-./configure --prefix=$PWD/_install
 ./configure --prefix=$PWD/_install --with-http_ssl_module --with-http_v2_module --with-http_auth_request_module
+# ./configure --prefix=$PWD/_install
 make -j8 && make install
 `
+field web.code.xterm args `type sh path usr/install/nginx-1.19.1/` auto delay
 
 section "启动服务"
 shell `
 cd ./_install
-./sbin/nginx -p $PWD &
+./sbin/nginx -p $PWD
 ./sbin/nginx -p $PWD -s reload
 `
 
@@ -30,18 +31,13 @@ section "配置文件"
 shell `
 cd usr/local/daemon/10000/
 mv conf conf.bak
-ln -s ~/contexts/usr/local/work/20230511-nginx-story/etc/conf/
+ln -s {{.Pwd}}/etc/conf/
 
 sudo ./sbin/nginx -p $PWD
-sudo ./sbin/nginx -p $PWD -s reload
-sysctl
+
+sudo vi /etc/rc.local
+# source {{.Pwd}}/etc/conf/rc_local.sh
+mkdir /tmp/nginx; cd {{.Pwd}}/usr/local/daemon/10000 && ./sbin/nginx -p $PWD
 `
-section "basic auth"
-shell `
-sudo yum -y install httpd-tools
-htpasswd -c ./ip_passwdfile username
-`
-spark inner `
-auth_basic "请输入账号密码";
-auth_basic_user_file /tmp/ip_passwdfile;
-`
+field web.code.xterm args `type sh path usr/local/daemon/10000/` auto delay
+field nfs.dir args `usr/local/daemon/10000/conf/cert/`

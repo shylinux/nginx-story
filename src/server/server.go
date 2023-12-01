@@ -17,6 +17,9 @@ import (
 
 const (
 	SBIN_NGINX = "./sbin/nginx"
+
+	CONF_NGINX_CONF = "conf/nginx.conf"
+	LOGS_ERROR_LOG  = "logs/error.log"
 )
 
 type server struct {
@@ -66,7 +69,7 @@ func (s server) Build(m *ice.Message, arg ...string) {
 func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Start(m, "", SBIN_NGINX, func(p string) []string {
 		os.MkdirAll(path.Join(p, "logs"), ice.MOD_DIR)
-		nfs.Rewrite(m.Message, path.Join(p, "conf/nginx.conf"), func(line string) string {
+		nfs.Rewrite(m.Message, path.Join(p, CONF_NGINX_CONF), func(line string) string {
 			if strings.HasPrefix(strings.TrimSpace(line), "listen") {
 				return strings.Replace(line, kit.Split(line, "\t ", ";")[1], path.Base(p), 1)
 			}
@@ -85,13 +88,13 @@ func (s server) Test(m *ice.Message, arg ...string) {
 	m.EchoIFrame(kit.Format("http://%s:%s", web.UserWeb(m).Hostname(), m.Option(tcp.PORT)))
 }
 func (s server) Error(m *ice.Message, arg ...string) {
-	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), "logs/error.log"))
+	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), LOGS_ERROR_LOG))
 }
 func (s server) Reload(m *ice.Message, arg ...string) {
 	s.Code.System(m, m.Option(nfs.DIR), SBIN_NGINX, "-p", nfs.PWD, "-s", "reload")
 }
 func (s server) Conf(m *ice.Message, arg ...string) {
-	s.Code.Field(m, ice.GetTypeKey(source{}), kit.Simple(m.Option(nfs.DIR)+ice.PS, "conf/nginx.conf", "43"), arg...)
+	s.Code.Field(m, ice.GetTypeKey(source{}), kit.Simple(m.Option(nfs.DIR)+ice.PS, CONF_NGINX_CONF, "43"), arg...)
 }
 func (s server) Make(m *ice.Message, arg ...string) {
 	s.Code.ToastLong(m, "编译中...", m.Option(nfs.DIR))
