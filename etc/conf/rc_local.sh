@@ -1,3 +1,7 @@
+#!/bin/sh
+# /etc/rc.local
+# source /home/shy/contexts/usr/local/work/20230511-nginx-story/etc/conf/rc_local.sh
+
 CTX_ROOT=${CTX_ROOT:=/home/shy/contexts}
 su - shy -c "cd $CTX_ROOT && ./bin/ice.bin forever start &"
 mkdir /tmp/nginx; cd $CTX_ROOT/usr/local/daemon/10000 && ./sbin/nginx -p $PWD
