@@ -27,17 +27,22 @@ shell `
 curl localhost
 `
 
-section "配置文件"
+section "服务配置"
 shell `
 cd usr/local/daemon/10000/
 mv conf conf.bak
 ln -s {{.Pwd}}/etc/conf/
-
 sudo ./sbin/nginx -p $PWD
+`
 
+section "系统配置"
+shell `
 sudo vi /etc/rc.local
-# source {{.Pwd}}/etc/conf/rc_local.sh
+CTX_ROOT=${CTX_ROOT:={{.CtxRoot}}}
+su - {{.Username}} -c "cd $CTX_ROOT && ./bin/ice.bin forever start &"
 mkdir /tmp/nginx; cd {{.Pwd}}/usr/local/daemon/10000 && ./sbin/nginx -p $PWD
 `
+
+section "配置工具"
 field web.code.xterm args `type sh path usr/local/daemon/10000/` auto delay
 field nfs.dir args `usr/local/daemon/10000/conf/cert/`
