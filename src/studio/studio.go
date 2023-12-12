@@ -78,7 +78,7 @@ func (s studio) Request(m *ice.Message, arg ...string) {
 		}
 	}
 	kit.For(kit.UnMarshal(m.Option(PARAMS)), func(key string, value string) { args = append(args, key, value) })
-	kit.For(kit.UnMarshal(m.Option(AUTH)), func(key, value string) { kit.Value(header, web.Authorization, key+lex.SP+value) })
+	kit.For(kit.UnMarshal(m.Option(AUTH)), func(key, value string) { kit.Value(header, html.Authorization, key+lex.SP+value) })
 	m.Options(web.SPIDE_HEADER, header, web.SPIDE_COOKIE, kit.UnMarshal(m.Option(COOKIE)))
 	m.Cmdy(web.SPIDE, m.OptionDefault(ENV, ice.DEV), web.SPIDE_RAW, m.Option(METHOD), m.Option(URL), args).Render(ice.RENDER_RAW)
 }
