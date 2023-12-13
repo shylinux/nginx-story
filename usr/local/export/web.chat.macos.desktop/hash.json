@@ -1,59 +1,50 @@
 {
-  "380e5d": {
+  "126792": {
     "meta": {
-      "icon": "/require/src/studio/studio.png",
-      "index": "web.code.nginx.studio",
+      "icon": "src/server/nginx.png",
+      "index": "web.code.nginx.configs",
       "name": "nginx",
-      "time": "2023-08-26 18:34:45.599"
+      "time": "2023-12-13 12:01:48.664"
     }
   },
-  "468a77": {
+  "224f3f": {
     "meta": {
       "icon": "usr/icons/Grapher.png",
       "index": "web.wiki.draw",
       "name": "Grapher",
-      "time": "2023-07-31 18:37:53.791"
+      "time": "2023-12-13 12:01:48.537"
     }
   },
-  "70260b": {
+  "5a8bf7": {
     "meta": {
-      "icon": "/require/src/server/nginx.png",
-      "index": "web.code.nginx.configs",
-      "name": "configs",
-      "time": "2023-08-26 22:31:16.765"
+      "icon": "src/studio/studio.png",
+      "index": "web.code.nginx.studio",
+      "name": "studio",
+      "time": "2023-12-13 12:01:48.665"
     }
   },
-  "9308cf": {
+  "c86b11": {
+    "meta": {
+      "icon": "usr/icons/Calendar.png",
+      "index": "web.team.plan",
+      "name": "Calendar",
+      "time": "2023-12-13 12:01:48.537"
+    }
+  },
+  "ca940d": {
     "meta": {
       "icon": "usr/icons/Photos.png",
       "index": "web.wiki.feel",
       "name": "Photos",
-      "time": "2023-07-31 18:37:53.790"
+      "time": "2023-12-13 12:01:48.536"
     }
   },
-  "d28307": {
-    "meta": {
-      "args": "month",
-      "icon": "usr/icons/Calendar.png",
-      "index": "web.team.plan",
-      "name": "Calendar",
-      "time": "2023-07-31 18:37:53.791"
-    }
-  },
-  "def685": {
-    "meta": {
-      "icon": "/require/src/server/nginx.jpeg",
-      "index": "web.code.nginx.configs",
-      "name": "configs",
-      "time": "2023-08-12 08:10:26.911"
-    }
-  },
-  "f35bef": {
+  "f62b1c": {
     "meta": {
       "icon": "usr/icons/Books.png",
       "index": "web.wiki.word",
       "name": "Books",
-      "time": "2023-07-31 18:37:53.790"
+      "time": "2023-12-13 12:01:48.536"
     }
   }
 }
