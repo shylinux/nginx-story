@@ -10,7 +10,7 @@ replace (
 
 require (
 	github.com/hashicorp/consul/api v1.24.0
-	shylinux.com/x/ice v1.4.1
-	shylinux.com/x/icebergs v1.8.1
-	shylinux.com/x/toolkits v0.8.1
+	shylinux.com/x/ice v1.4.2
+	shylinux.com/x/icebergs v1.8.2
+	shylinux.com/x/toolkits v0.8.2
 )
