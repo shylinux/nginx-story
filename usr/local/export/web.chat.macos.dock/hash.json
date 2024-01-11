@@ -1,50 +1,50 @@
 {
-  "07c0d7": {
-    "meta": {
-      "icon": "usr/icons/go.png",
-      "index": "web.code.compile",
-      "name": "go",
-      "time": "2023-12-13 12:01:48.538"
-    }
-  },
-  "22486b": {
-    "meta": {
-      "icon": "usr/icons/vimer.png",
-      "index": "web.code.vimer",
-      "name": "vimer",
-      "time": "2023-12-13 12:01:48.538"
-    }
-  },
-  "9ebbbb": {
+  "3b4efe": {
     "meta": {
       "icon": "usr/icons/git.png",
       "index": "web.code.git.status",
       "name": "git",
-      "time": "2023-12-13 12:01:48.538"
+      "time": "2024-01-11 13:38:54.258"
     }
   },
-  "b066cc": {
+  "5640e1": {
     "meta": {
-      "icon": "usr/icons/Finder.png",
-      "index": "web.chat.macos.finder",
-      "name": "Finder",
-      "time": "2023-12-13 12:01:48.537"
+      "icon": "usr/icons/go.png",
+      "index": "web.code.compile",
+      "name": "go",
+      "time": "2024-01-11 13:38:54.258"
     }
   },
-  "f5291f": {
+  "ba7e7d": {
     "meta": {
-      "icon": "usr/icons/Terminal.png",
-      "index": "web.code.xterm",
-      "name": "Terminal",
-      "time": "2023-12-13 12:01:48.538"
+      "icon": "usr/icons/vimer.png",
+      "index": "web.code.vimer",
+      "name": "vimer",
+      "time": "2024-01-11 13:38:54.259"
     }
   },
-  "fa8e58": {
+  "d4b1cc": {
     "meta": {
       "icon": "usr/icons/Safari.png",
       "index": "web.chat.iframe",
       "name": "Safari",
-      "time": "2023-12-13 12:01:48.538"
+      "time": "2024-01-11 13:38:54.256"
+    }
+  },
+  "defdd4": {
+    "meta": {
+      "icon": "usr/icons/Finder.png",
+      "index": "web.chat.macos.finder",
+      "name": "Finder",
+      "time": "2024-01-11 13:38:54.256"
+    }
+  },
+  "f677a5": {
+    "meta": {
+      "icon": "usr/icons/Terminal.png",
+      "index": "web.code.xterm",
+      "name": "Terminal",
+      "time": "2024-01-11 13:38:54.257"
     }
   }
 }
