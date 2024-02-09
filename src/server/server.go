@@ -11,7 +11,6 @@ import (
 	"shylinux.com/x/icebergs/base/mdb"
 	"shylinux.com/x/icebergs/base/nfs"
 	"shylinux.com/x/icebergs/base/tcp"
-	"shylinux.com/x/icebergs/base/web"
 	kit "shylinux.com/x/toolkits"
 )
 
@@ -85,7 +84,7 @@ func (s server) Stop(m *ice.Message, arg ...string) {
 	s.Code.ToastSuccess(m)
 }
 func (s server) Test(m *ice.Message, arg ...string) {
-	m.EchoIFrame(kit.Format("http://%s:%s", web.UserWeb(m).Hostname(), m.Option(tcp.PORT)))
+	m.EchoIFrame(kit.Format("http://%s:%s", m.UserWeb().Hostname(), m.Option(tcp.PORT)))
 }
 func (s server) Error(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), LOGS_ERROR_LOG))
