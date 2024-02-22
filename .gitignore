@@ -1,6 +1,7 @@
 src/binpack_usr.go
 src/binpack.go
 src/version.go
+etc/conf/portal
 etc/conf/cert/
 etc/local.shy
 bin/
