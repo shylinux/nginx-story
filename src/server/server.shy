@@ -13,7 +13,7 @@ tar xvf nginx-1.19.1.tar.gz && cd nginx-1.19.1
 # ./configure --prefix=$PWD/_install
 make -j8 && make install
 `
-field web.code.xterm args `type sh path usr/install/nginx-1.19.1/` auto delay
+field web.code.xterm args `sh "" usr/install/nginx-1.19.1/` auto delay
 
 section "启动服务"
 shell `
@@ -44,5 +44,5 @@ mkdir /tmp/nginx; cd {{.Pwd}}/usr/local/daemon/10000 && ./sbin/nginx -p $PWD
 `
 
 section "配置工具"
-field web.code.xterm args `type sh path usr/local/daemon/10000/` auto delay
 field nfs.dir args `usr/local/daemon/10000/conf/cert/`
+field web.code.xterm args `sh "10000" "cd ~/contexts/usr/local/daemon/10000/"` auto delay
