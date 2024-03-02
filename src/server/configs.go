@@ -126,7 +126,7 @@ func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []s
 			for _, file := range list {
 				conf, block = s.parse(m, dir, strings.TrimPrefix(file, dir), conf, block, stats)
 			}
-		case "events", HTTP, "types":
+		case HTTP, "events", "types":
 			block = []string{ls[0]}
 		case "}":
 			block = kit.Slice(block, 0, -1)
@@ -138,6 +138,16 @@ func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []s
 			block = []string{HTTP, kit.Keys(UPSTREAM, ls[1])}
 			stats[UPSTREAM]++
 		case SERVER:
+			if ls[1] == "{" {
+				kit.Value(conf, kit.Keys(HTTP, SERVER, "-2"), kit.Dict())
+				block = []string{HTTP, kit.Keys(SERVER, "-3")}
+				stats[SERVER]++
+			} else {
+				kit.Value(conf, kit.Keys(block, SERVER), ls[1])
+			}
+			break
+
+			m.Debug("what %v %v", ls, block)
 			if len(block) == 1 || len(block) > 1 && strings.HasPrefix(block[1], SERVER+nfs.PT) {
 				kit.Value(conf, kit.Keys(block, kit.Keys(SERVER, "-2")), kit.Dict())
 				block = append(block, kit.Keys(SERVER, "-3"))
@@ -146,6 +156,7 @@ func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []s
 			}
 			fallthrough
 		default:
+			m.Debug("what %v %v", ls, block)
 			kit.Value(conf, kit.Keys(block, ls[0]), strings.Join(ls[1:], lex.SP))
 		}
 	})
