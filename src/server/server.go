@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	SBIN_NGINX      = "./sbin/nginx"
+	SBIN_NGINX      = "sbin/nginx"
 	CONF_NGINX_CONF = "conf/nginx.conf"
 	LOGS_ERROR_LOG  = "logs/error.log"
 )
