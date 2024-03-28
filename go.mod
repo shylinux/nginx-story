@@ -13,5 +13,3 @@ require (
 	shylinux.com/x/icebergs v1.9.4
 	shylinux.com/x/toolkits v1.0.4
 )
-
-require github.com/hashicorp/consul/api v1.24.0

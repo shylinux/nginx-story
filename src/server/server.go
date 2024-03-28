@@ -8,15 +8,14 @@ import (
 
 	"shylinux.com/x/ice"
 	"shylinux.com/x/icebergs/base/cli"
-	"shylinux.com/x/icebergs/base/mdb"
 	"shylinux.com/x/icebergs/base/nfs"
 	"shylinux.com/x/icebergs/base/tcp"
+	"shylinux.com/x/icebergs/core/code"
 	kit "shylinux.com/x/toolkits"
 )
 
 const (
-	SBIN_NGINX = "./sbin/nginx"
-
+	SBIN_NGINX      = "./sbin/nginx"
 	CONF_NGINX_CONF = "conf/nginx.conf"
 	LOGS_ERROR_LOG  = "logs/error.log"
 )
@@ -24,19 +23,22 @@ const (
 type server struct {
 	ice.Code
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
-	action string `data:"test,error,reload,conf,make"`
+	action string `data:"reload,stop,conf,test,error,make"`
 	start  string `name:"start port*=10000" help:"启动"`
 	test   string `name:"test path*=/" help:"测试"`
-	error  string `name:"error" help:"日志"`
-	reload string `name:"reload" help:"重载"`
+	error  string `name:"error" help:"日志" icon:"bi bi-calendar-week"`
+	reload string `name:"reload" help:"重载" icon:"bi bi-bootstrap-reboot"`
 	conf   string `name:"conf" help:"配置"`
 	make   string `name:"make" help:"编译"`
 	list   string `name:"list port path auto start build download" help:"服务器"`
 }
 
+func (s server) Init(m *ice.Message, arg ...string) {
+	code.PackageCreate(m.Message, nfs.SOURCE, "nginx", "", "src/nginx.png", s.Link(m))
+}
 func (s server) Inputs(m *ice.Message, arg ...string) {
 	if arg[0] == nfs.PATH {
-		s.System(m, path.Join(m.Option(nfs.DIR), "conf"), "grep", "-rh", "location")
+		s.System(m, path.Join(m.Option(nfs.DIR), "conf"), cli.GREP, "-rh", "location")
 		list := kit.Dict()
 		for _, v := range strings.Split(m.Result(), ice.NL) {
 			if strings.HasPrefix(strings.TrimSpace(v), "#") {
@@ -60,10 +62,11 @@ func (s server) Build(m *ice.Message, arg ...string) {
 		args = append(args, kit.Format("--add-module=%s", kit.Path(value)))
 	})
 	if runtime.GOOS == cli.LINUX {
-		s.Code.Build(m, "", "--with-http_ssl_module", "--with-http_v2_module", "--with-http_auth_request_module", args)
+		s.Code.Build(m, "", "--with-http_v2_module", "--with-http_ssl_module", "--with-http_auth_request_module", args)
 	} else {
-		s.Code.Build(m, "", "--with-http_v2_module", args)
+		s.Code.Build(m, "", "--with-http_v2_module", "--without-http_rewrite_module", args)
 	}
+	m.Cmdy(nfs.DIR, path.Join(s.Path(m, ""), "_install/sbin/nginx"))
 }
 func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Start(m, "", SBIN_NGINX, func(p string) []string {
@@ -77,11 +80,13 @@ func (s server) Start(m *ice.Message, arg ...string) {
 		return []string{"-p", kit.Path(p), "-g", "daemon off;"}
 	})
 }
+func (s server) Reload(m *ice.Message, arg ...string) { s.cmds(m, arg...) }
 func (s server) Stop(m *ice.Message, arg ...string) {
-	s.Code.System(m, m.Option(nfs.DIR), SBIN_NGINX, "-p", nfs.PWD, "-s", "stop")
-	m.Option(mdb.HASH, "")
-	s.Code.Daemon(m.Spawn(), m.Option(nfs.DIR), cli.STOP)
-	s.Code.ToastSuccess(m)
+	s.cmds(m, arg...)
+	s.Code.Stop(m, arg...)
+}
+func (s server) Conf(m *ice.Message, arg ...string) {
+	m.ProcessField(ice.GetTypeKey(source{}), kit.Simple(m.Option(nfs.DIR)+ice.PS, CONF_NGINX_CONF, "43"), arg...)
 }
 func (s server) Test(m *ice.Message, arg ...string) {
 	m.EchoIFrame(kit.Format("http://%s:%s", m.UserWeb().Hostname(), m.Option(tcp.PORT)))
@@ -89,25 +94,25 @@ func (s server) Test(m *ice.Message, arg ...string) {
 func (s server) Error(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), LOGS_ERROR_LOG))
 }
-func (s server) Reload(m *ice.Message, arg ...string) {
-	s.Code.System(m, m.Option(nfs.DIR), SBIN_NGINX, "-p", nfs.PWD, "-s", "reload")
-}
-func (s server) Conf(m *ice.Message, arg ...string) {
-	s.Code.Field(m, ice.GetTypeKey(source{}), kit.Simple(m.Option(nfs.DIR)+ice.PS, CONF_NGINX_CONF, "43"), arg...)
-}
 func (s server) Make(m *ice.Message, arg ...string) {
-	s.Code.ToastLong(m, "编译中...", m.Option(nfs.DIR))
+	m.ToastProcess("编译中...")
 	s.Stream(m, s.Path(m, ""), cli.MAKE, "-j8")
 	s.Stream(m, s.Path(m, ""), cli.MAKE, "install")
 	s.Stop(m)
-	s.Code.ToastLong(m, "停止中...", m.Option(nfs.DIR))
+	m.ToastProcess("停止中...")
 	m.Sleep("3s")
-	s.Code.ToastLong(m, "启动中...", m.Option(nfs.DIR))
+	m.ToastProcess("启动中...")
 	s.Start(m)
 	m.Sleep("1s")
-	s.Code.Toast(m, "启动成功", m.Option(nfs.DIR))
+	m.ToastSuccess("启动成功")
 	m.ProcessRefresh()
 }
 func (s server) List(m *ice.Message, arg ...string) { s.Code.List(m, "", arg...) }
 
 func init() { ice.CodeModCmd(server{}) }
+
+func (s server) cmds(m *ice.Message, arg ...string) {
+	defer m.ToastProcess()()
+	p := m.OptionDefault(nfs.DIR, path.Join(ice.USR_LOCAL_DAEMON, m.Option(tcp.PORT)))
+	s.Code.System(m, p, SBIN_NGINX, "-p", kit.Path(p), "-s", m.ActionKey())
+}
