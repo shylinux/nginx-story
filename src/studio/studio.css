@@ -1,5 +1,8 @@
-fieldset.web.code.nginx.studio input { min-width:80px; }
 fieldset.web.code.nginx.studio>div.output>div.project div.item:not(.text) { line-height:32px; }
+fieldset.web.code.nginx.studio>div.output>div.project span.method { width:48px; display:inline-block; }
+
+
+/* fieldset.web.code.nginx.studio input { min-width:80px; } */
 fieldset.web.code.nginx.studio>div.output>div.layout>div.display:not(.select) { display:none; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.profile:not(.select) { display:none; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content { padding:20px; display:flex; flex-direction:column; }
@@ -31,14 +34,8 @@ fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content { white-space:pre; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content th { border:var(--box-border); box-shadow:none; height:32px; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content>table td { border:0; height:32px; }
-body {
-	--request-GET:var(--ui-green-base);
-	--request-PUT:var(--ui-blue-base);
-	--request-POST:var(--ui-gold-base);
-	--request-DELETE:var(--ui-red-base);
-	--request-DEL:var(--ui-red-base);
-}
-fieldset.web.code.nginx.studio>div.output>div.project span.method { width:48px; display:inline-block; }
+
+body { --request-GET:green; --request-PUT:blue; --request-POST:gold; --request-DELETE:red; --request-DEL:red; }
 fieldset.web.code.nginx.studio span.GET { color:var(--request-GET); }
 fieldset.web.code.nginx.studio span.PUT { color:var(--request-PUT); }
 fieldset.web.code.nginx.studio span.POST { color:var(--request-POST); }

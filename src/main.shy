@@ -5,5 +5,5 @@ refer `
 源码 https://github.com/nginx/nginx
 `
 source server/server.shy
-source client/client.shy
+source server/configs.shy
 source studio/studio.shy

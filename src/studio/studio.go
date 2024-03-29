@@ -29,14 +29,12 @@ const (
 type studio struct {
 	ice.Code
 	ice.Hash
+	export string `data:"true"`
 	field  string `data:"time,hash,name,method,url,params,header,cookie,auth,config"`
-	tools  string `data:"web.spide"`
-	create string `name:"create name* method* url*"`
-	list   string `name:"list env@key list" help:"接口测试" icon:"studio.png"`
+	create string `name:"create url* method* name*"`
+	list   string `name:"studio env@key list" help:"接口测试" icon:"studio.png"`
 }
 
-func (s studio) Init(m *ice.Message, arg ...string) { s.Hash.Import(m) }
-func (s studio) Exit(m *ice.Message, arg ...string) { s.Hash.Export(m) }
 func (s studio) Inputs(m *ice.Message, arg ...string) {
 	switch m.Option(ctx.ACTION) {
 	case ENV:
@@ -68,25 +66,25 @@ func (s studio) Inputs(m *ice.Message, arg ...string) {
 		}
 	}
 }
-func (s studio) Request(m *ice.Message, arg ...string) {
-	args, header := []string{}, kit.UnMarshal(m.Option(HEADER))
-	if m.Option(METHOD) != http.MethodGet {
-		if strings.HasPrefix(kit.Format(kit.Value(header, "Content-Type")), "application/json") {
-			args = append(args, web.SPIDE_JSON)
-		} else {
-			args = append(args, web.SPIDE_FORM)
-		}
-	}
-	kit.For(kit.UnMarshal(m.Option(PARAMS)), func(key string, value string) { args = append(args, key, value) })
-	kit.For(kit.UnMarshal(m.Option(AUTH)), func(key, value string) { kit.Value(header, html.Authorization, key+lex.SP+value) })
-	m.Options(web.SPIDE_HEADER, header, web.SPIDE_COOKIE, kit.UnMarshal(m.Option(COOKIE)))
-	m.Cmdy(web.SPIDE, m.OptionDefault(ENV, ice.DEV), web.SPIDE_RAW, m.Option(METHOD), m.Option(URL), args).Render(ice.RENDER_RAW)
-}
 func (s studio) Save(m *ice.Message, arg ...string) {
 	s.Hash.Modify(m, m.OptionSimple(mdb.HASH, METHOD, URL, PARAMS, HEADER, COOKIE, AUTH, CONFIG)...)
 }
 func (s studio) List(m *ice.Message, arg ...string) {
 	s.Hash.List(m).PushAction(s.Remove).Action(s.Create).Display("")
+}
+func (s studio) Request(m *ice.Message, arg ...string) {
+	args, header := []string{}, kit.UnMarshal(m.Option(HEADER))
+	if m.Option(METHOD) != http.MethodGet {
+		if strings.HasPrefix(kit.Format(kit.Value(header, html.ContentType)), html.ApplicationJSON) {
+			args = append(args, web.SPIDE_JSON)
+		} else {
+			args = append(args, web.SPIDE_FORM)
+		}
+	}
+	kit.For(kit.UnMarshal(m.Option(PARAMS)), func(k, v string) { args = append(args, k, v) })
+	kit.For(kit.UnMarshal(m.Option(AUTH)), func(k, v string) { kit.Value(header, html.Authorization, k+lex.SP+v) })
+	m.Options(web.SPIDE_HEADER, header, web.SPIDE_COOKIE, kit.UnMarshal(m.Option(COOKIE)))
+	m.Cmdy(web.SPIDE, m.OptionDefault(ENV, ice.DEV), web.SPIDE_DETAIL, m.Option(METHOD), m.Option(URL), args).Render(ice.RENDER_RAW)
 }
 
 func init() { ice.CodeModCmd(studio{}) }
