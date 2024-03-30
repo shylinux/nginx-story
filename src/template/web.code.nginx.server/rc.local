@@ -1,0 +1,2 @@
+# sudo vi /etc/rc.local
+mkdir /tmp/nginx; cd {{.Cmdx "runtime" "host.pwd"}}/usr/local/daemon/{{.Option "port"}} && ./sbin/nginx -p $PWD
