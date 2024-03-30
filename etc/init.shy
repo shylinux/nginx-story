@@ -2,5 +2,7 @@
 	config space icons "src/server/nginx.png"
 	space main desktop
 	serve main desktop
+~web.code
+	binpack insert etc/conf/
 ~ssh
 	source local.shy

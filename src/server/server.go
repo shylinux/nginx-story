@@ -8,6 +8,7 @@ import (
 
 	"shylinux.com/x/ice"
 	"shylinux.com/x/icebergs/base/cli"
+	"shylinux.com/x/icebergs/base/lex"
 	"shylinux.com/x/icebergs/base/nfs"
 	"shylinux.com/x/icebergs/base/tcp"
 	"shylinux.com/x/icebergs/core/code"
@@ -23,22 +24,30 @@ const (
 type server struct {
 	ice.Code
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
-	action string `data:"reload,stop,conf,test,error"`
+	action string `data:"reload,conf,test,error,change,rclocal"`
 	start  string `name:"start port*=10000" help:"启动"`
 	reload string `name:"reload" help:"重载" icon:"bi bi-bootstrap-reboot"`
 	conf   string `name:"conf" help:"配置"`
 	test   string `name:"test path*=/" help:"测试" icon:"bi bi-clipboard-check"`
 	error  string `name:"error" help:"日志" icon:"bi bi-calendar-week"`
-	list   string `name:"list port path auto start build download" help:"服务器"`
+	list   string `name:"list port path auto start build download install" help:"服务器"`
 }
 
 func (s server) Init(m *ice.Message, arg ...string) {
 	code.PackageCreate(m.Message, nfs.SOURCE, "nginx", "", "", s.Link(m))
 }
+func (s server) Install(m *ice.Message, arg ...string) {
+	m.PushStream()
+	m.Cmd(cli.SYSTEM, "yum", "install", "-y", "nginx")
+	m.Cmd(cli.SYSTEM, cli.MV, "/etc/nginx", "/etc/nginx.bak")
+	m.Cmd(cli.SYSTEM, cli.LN, "-s", kit.Path("etc/conf/"), "/etc/nginx")
+	m.Cmd(cli.SYSTEM, "systemctl", "start", "nginx")
+	m.Cmd(cli.SYSTEM, "systemctl", "enable", "nginx")
+}
 func (s server) Build(m *ice.Message, arg ...string) {
 	args := []string{}
 	if runtime.GOOS == cli.LINUX {
-		s.Code.Build(m, "", "--with-http_v2_module", "--with-http_ssl_module", "--with-http_auth_request_module", args)
+		s.Code.Build(m, "", "--with-http_v2_module", "--with-http_auth_request_module", "--with-http_ssl_module", args)
 	} else {
 		s.Code.Build(m, "", "--with-http_v2_module", "--without-http_rewrite_module", args)
 	}
@@ -56,8 +65,21 @@ func (s server) Start(m *ice.Message, arg ...string) {
 		return []string{"-p", kit.Path(p), "-g", "daemon off;"}
 	})
 }
-func (s server) Reload(m *ice.Message, arg ...string) { s.cmds(m, arg...) }
-func (s server) Stop(m *ice.Message, arg ...string)   { s.cmds(m, arg...); s.Code.Stop(m, arg...) }
+func (s server) Change(m *ice.Message, arg ...string) {
+	p := path.Join(ice.USR_LOCAL_DAEMON, m.Option(tcp.PORT), "conf")
+	m.Trash(p)
+	m.Cmd(cli.SYSTEM, cli.LN, "-s", kit.Path("etc/conf/"), p)
+}
+func (s server) Rclocal(m *ice.Message, arg ...string) {
+	m.Cmd(nfs.SAVE, "etc/local.sh", m.Template("rc.local")+lex.NL)
+}
+func (s server) Reload(m *ice.Message, arg ...string) {
+	s.cmds(m, arg...)
+}
+func (s server) Stop(m *ice.Message, arg ...string) {
+	s.cmds(m, arg...)
+	s.Code.Stop(m, arg...)
+}
 func (s server) Conf(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(nfs.DIR), CONF_NGINX_CONF)).ProcessInner()
 }
@@ -67,7 +89,10 @@ func (s server) Test(m *ice.Message, arg ...string) {
 func (s server) Error(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), LOGS_ERROR_LOG))
 }
-func (s server) List(m *ice.Message, arg ...string) { s.Code.List(m, "", arg...) }
+func (s server) List(m *ice.Message, arg ...string) {
+	s.Code.List(m, "", arg...)
+	m.EchoScript(m.Cmdx(nfs.CAT, "etc/local.sh"))
+}
 
 func init() { ice.CodeModCmd(server{}) }
 

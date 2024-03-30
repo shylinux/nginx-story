@@ -17,10 +17,13 @@ import (
 const (
 	HTTP     = "http"
 	SERVER   = "server"
-	LISTEN   = "listen"
-	UPSTREAM = "upstream"
 	LOCATION = "location"
+	UPSTREAM = "upstream"
 	INCLUDE  = "include"
+	PORTAL   = "portal"
+	LISTEN   = "listen"
+	EVENTS   = "events"
+	TYPES    = "types"
 
 	SERVER_NAME      = "server_name"
 	PROXY_PASS       = "proxy_pass"
@@ -32,12 +35,13 @@ const (
 type configs struct {
 	path   string `data:"etc/conf/"`
 	file   string `data:"nginx.conf"`
-	create string `name:"create name* https=yes,no upstream* server*"`
+	create string `name:"create domain* https=yes,no upstream* server*"`
 	list   string `name:"list order path auto" help:"服务配置" icon:"nginx.png"`
 }
 
 func (s configs) Init(m *ice.Message, arg ...string) {
 	m.TransInput(LISTEN, "监听", PROXY_PASS, "代理")
+	m.TransInput(ice.HTTPS, "加密", UPSTREAM, "服务", SERVER, "地址")
 }
 func (s configs) Search(m *ice.Message, arg ...string) {
 	if arg[0] == mdb.FOREACH {
@@ -48,31 +52,37 @@ func (s configs) Search(m *ice.Message, arg ...string) {
 }
 func (s configs) Inputs(m *ice.Message, arg ...string) {
 	switch arg[0] {
-	case mdb.NAME:
+	case web.DOMAIN:
+		m.Push(arg[0], m.UserWeb().Hostname())
 		m.Cmd(nfs.DIR, path.Join(m.Config(nfs.PATH), SERVER), mdb.NAME, func(value ice.Maps) {
 			m.Push(arg[0], strings.TrimSuffix(value[mdb.NAME], _CONF))
 		})
 	case UPSTREAM:
+		m.Push(arg[0], kit.Split(m.UserWeb().Hostname(), ".")[0])
 		m.Cmd(nfs.DIR, path.Join(m.Config(nfs.PATH), UPSTREAM), mdb.NAME, func(value ice.Maps) {
 			m.Push(arg[0], strings.TrimSuffix(value[mdb.NAME], _CONF))
 		})
 	case SERVER:
+		m.Push(arg[0], "127.0.0.1:9020")
 		m.Cmdy(tcp.PORT, mdb.INPUTS, arg)
 	}
 }
 func (s configs) Create(m *ice.Message, arg ...string) {
-	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(mdb.NAME)+_CONF), m.Template(kit.Select(SERVER+_CONF, "servers.conf", m.Option(ice.HTTPS) == "yes")))
+	m.Cmd(nfs.DIR, "etc/conf/", kit.Dict(nfs.DIR_DEEP, ice.TRUE, nfs.DIR_TYPE, nfs.CAT)).Table(func(value ice.Maps) {
+		m.Cmd(nfs.DEFS, value[nfs.PATH], m.Cmdx(nfs.CAT, value[nfs.PATH]))
+	})
+	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(web.DOMAIN)+_CONF), m.Template(kit.Select(SERVER+_CONF, "servers.conf", m.Option(ice.HTTPS) == "yes")))
 	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), LOCATION, m.Option(UPSTREAM)+_CONF), m.Template(LOCATION+_CONF))
 	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), UPSTREAM, m.Option(UPSTREAM)+_CONF), m.Template(UPSTREAM+_CONF))
 }
 func (s configs) Remove(m *ice.Message, arg ...string) {
-	name := kit.Split(m.Option(mdb.NAME), ".")[0]
-	if strings.HasPrefix(m.Option(nfs.FILE), "portal/") {
+	name := kit.Split(m.Option(mdb.NAME), nfs.PT)[0]
+	if strings.HasPrefix(m.Option(nfs.FILE), PORTAL+nfs.PS) {
 		m.Trash(m.Config(nfs.PATH) + path.Dir(m.Option(nfs.FILE)))
 	} else {
 		m.Trash(m.Config(nfs.PATH) + m.Option(nfs.FILE))
-		m.Trash(m.Config(nfs.PATH) + "location/" + name + _CONF)
-		m.Trash(m.Config(nfs.PATH) + "upstream/" + name + _CONF)
+		m.Trash(m.Config(nfs.PATH) + LOCATION + nfs.PS + name + _CONF)
+		m.Trash(m.Config(nfs.PATH) + UPSTREAM + nfs.PS + name + _CONF)
 	}
 }
 func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
@@ -121,14 +131,14 @@ func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []s
 		switch ls[0] {
 		case INCLUDE:
 			if ls[1] == "mime.types" {
-				return
+				break
 			}
 			list, err := filepath.Glob(path.Join(dir, ls[1]))
 			m.Warn(err)
 			for _, file := range list {
 				conf, block = s.parse(m, dir, strings.TrimPrefix(file, dir), conf, block, stats)
 			}
-		case HTTP, "events", "types":
+		case HTTP, EVENTS, TYPES:
 			block = []string{ls[0]}
 		case "}":
 			block = kit.Slice(block, 0, -1)
