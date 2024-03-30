@@ -4,6 +4,7 @@ src/version.go
 etc/conf/portal
 etc/conf/cert/
 etc/local.shy
+etc/conf/
 bin/
 var/
 usr/
