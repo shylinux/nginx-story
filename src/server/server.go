@@ -48,7 +48,7 @@ func (s server) Start(m *ice.Message, arg ...string) {
 	s.Code.Start(m, "", SBIN_NGINX, func(p string) []string {
 		os.MkdirAll(path.Join(p, "logs"), ice.MOD_DIR)
 		nfs.Rewrite(m.Message, path.Join(p, CONF_NGINX_CONF), func(line string) string {
-			if strings.HasPrefix(strings.TrimSpace(line), "listen") {
+			if strings.HasPrefix(strings.TrimSpace(line), LISTEN) {
 				return strings.Replace(line, kit.Split(line, "\t ", ";")[1], path.Base(p), 1)
 			}
 			return line

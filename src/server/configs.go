@@ -37,7 +37,7 @@ type configs struct {
 }
 
 func (s configs) Init(m *ice.Message, arg ...string) {
-	m.TransInput("listen", "监听", "proxy_pass", "代理")
+	m.TransInput(LISTEN, "监听", PROXY_PASS, "代理")
 }
 func (s configs) Search(m *ice.Message, arg ...string) {
 	if arg[0] == mdb.FOREACH {
@@ -71,8 +71,8 @@ func (s configs) Remove(m *ice.Message, arg ...string) {
 		m.Trash(m.Config(nfs.PATH) + path.Dir(m.Option(nfs.FILE)))
 	} else {
 		m.Trash(m.Config(nfs.PATH) + m.Option(nfs.FILE))
-		m.Trash(m.Config(nfs.PATH) + "location/" + name + ".conf")
-		m.Trash(m.Config(nfs.PATH) + "upstream/" + name + ".conf")
+		m.Trash(m.Config(nfs.PATH) + "location/" + name + _CONF)
+		m.Trash(m.Config(nfs.PATH) + "upstream/" + name + _CONF)
 	}
 }
 func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
