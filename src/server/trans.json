@@ -1,0 +1,9 @@
+{
+	"input": {
+		"listen": "监听",
+		"proxy_pass": "代理",
+		"https": "加密",
+		"upstream": "服务",
+		"server": "地址"
+	}
+}

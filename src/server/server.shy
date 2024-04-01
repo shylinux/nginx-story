@@ -1,14 +1,6 @@
 chapter "server"
 field web.code.nginx.server
 
-section "系统安装"
-shell centos `
-yum install -y nginx
-systemctl start nginx
-systemctl status nginx
-systemctl stop nginx
-systemctl enable nginx
-`
 section "编译安装"
 shell centos `
 yum install -y wget make gcc
@@ -36,8 +28,11 @@ shell `
 curl localhost
 `
 
-section "系统配置"
-shell `
-sudo vi /etc/rc.local
-mkdir /tmp/nginx; cd {{.Pwd}}/usr/local/daemon/10000 && ./sbin/nginx -p $PWD
+section "系统安装"
+shell centos `
+yum install -y nginx
+systemctl start nginx
+systemctl status nginx
+systemctl stop nginx
+systemctl enable nginx
 `

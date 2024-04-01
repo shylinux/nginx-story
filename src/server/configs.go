@@ -20,7 +20,6 @@ const (
 	LOCATION = "location"
 	UPSTREAM = "upstream"
 	INCLUDE  = "include"
-	PORTAL   = "portal"
 	LISTEN   = "listen"
 	EVENTS   = "events"
 	TYPES    = "types"
@@ -29,37 +28,25 @@ const (
 	PROXY_PASS       = "proxy_pass"
 	PROXY_SET_HEADER = "proxy_set_header"
 
-	_CONF = ".conf"
+	NGINX_CONF = "nginx.conf"
+	_CONF      = ".conf"
 )
 
 type configs struct {
-	path   string `data:"etc/conf/"`
-	file   string `data:"nginx.conf"`
 	create string `name:"create domain* https=yes,no upstream* server*"`
 	list   string `name:"list order path auto" help:"服务配置" icon:"nginx.png"`
 }
 
-func (s configs) Init(m *ice.Message, arg ...string) {
-	m.TransInput(LISTEN, "监听", PROXY_PASS, "代理")
-	m.TransInput(ice.HTTPS, "加密", UPSTREAM, "服务", SERVER, "地址")
-}
-func (s configs) Search(m *ice.Message, arg ...string) {
-	if arg[0] == mdb.FOREACH {
-		m.Cmds("").Table(func(value ice.Maps) {
-			m.PushSearch(mdb.TYPE, web.LINK, mdb.NAME, value[mdb.NAME], mdb.TEXT, s.host(m, value[mdb.NAME], value[LISTEN]), value)
-		})
-	}
-}
 func (s configs) Inputs(m *ice.Message, arg ...string) {
 	switch arg[0] {
 	case web.DOMAIN:
 		m.Push(arg[0], m.UserWeb().Hostname())
-		m.Cmd(nfs.DIR, path.Join(m.Config(nfs.PATH), SERVER), mdb.NAME, func(value ice.Maps) {
+		m.Cmd(nfs.DIR, path.Join(ETC_CONF, SERVER), mdb.NAME, func(value ice.Maps) {
 			m.Push(arg[0], strings.TrimSuffix(value[mdb.NAME], _CONF))
 		})
 	case UPSTREAM:
-		m.Push(arg[0], kit.Split(m.UserWeb().Hostname(), ".")[0])
-		m.Cmd(nfs.DIR, path.Join(m.Config(nfs.PATH), UPSTREAM), mdb.NAME, func(value ice.Maps) {
+		m.Push(arg[0], kit.Split(m.UserWeb().Hostname(), nfs.PT)[0])
+		m.Cmd(nfs.DIR, path.Join(ETC_CONF, UPSTREAM), mdb.NAME, func(value ice.Maps) {
 			m.Push(arg[0], strings.TrimSuffix(value[mdb.NAME], _CONF))
 		})
 	case SERVER:
@@ -68,37 +55,36 @@ func (s configs) Inputs(m *ice.Message, arg ...string) {
 	}
 }
 func (s configs) Create(m *ice.Message, arg ...string) {
-	m.Cmd(nfs.DIR, "etc/conf/", kit.Dict(nfs.DIR_DEEP, ice.TRUE, nfs.DIR_TYPE, nfs.CAT)).Table(func(value ice.Maps) {
+	m.Cmd(nfs.DIR, ETC_CONF, kit.Dict(nfs.DIR_DEEP, ice.TRUE, nfs.DIR_TYPE, nfs.CAT)).Table(func(value ice.Maps) {
 		m.Cmd(nfs.DEFS, value[nfs.PATH], m.Cmdx(nfs.CAT, value[nfs.PATH]))
 	})
-	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), SERVER, m.Option(web.DOMAIN)+_CONF), m.Template(kit.Select(SERVER+_CONF, "servers.conf", m.Option(ice.HTTPS) == "yes")))
-	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), LOCATION, m.Option(UPSTREAM)+_CONF), m.Template(LOCATION+_CONF))
-	m.Cmd(nfs.DEFS, path.Join(m.Config(nfs.PATH), UPSTREAM, m.Option(UPSTREAM)+_CONF), m.Template(UPSTREAM+_CONF))
+	m.Cmd(nfs.DEFS, path.Join(ETC_CONF, SERVER, m.Option(web.DOMAIN)+_CONF), m.Template(kit.Select(SERVER+_CONF, "servers.conf", m.Option(ice.HTTPS) == "yes")))
+	m.Cmd(nfs.DEFS, path.Join(ETC_CONF, LOCATION, m.Option(UPSTREAM)+_CONF), m.Template(LOCATION+_CONF))
+	m.Cmd(nfs.DEFS, path.Join(ETC_CONF, UPSTREAM, m.Option(UPSTREAM)+_CONF), m.Template(UPSTREAM+_CONF))
 }
 func (s configs) Remove(m *ice.Message, arg ...string) {
 	name := kit.Split(m.Option(mdb.NAME), nfs.PT)[0]
-	if strings.HasPrefix(m.Option(nfs.FILE), PORTAL+nfs.PS) {
-		m.Trash(m.Config(nfs.PATH) + path.Dir(m.Option(nfs.FILE)))
+	if strings.HasPrefix(m.Option(nfs.FILE), web.PORTAL+nfs.PS) {
+		m.Trash(path.Join(ETC_CONF, path.Dir(m.Option(nfs.FILE))))
 	} else {
-		m.Trash(m.Config(nfs.PATH) + m.Option(nfs.FILE))
-		m.Trash(m.Config(nfs.PATH) + LOCATION + nfs.PS + name + _CONF)
-		m.Trash(m.Config(nfs.PATH) + UPSTREAM + nfs.PS + name + _CONF)
+		m.Trash(path.Join(ETC_CONF, m.Option(nfs.FILE)))
+		m.Trash(path.Join(ETC_CONF, LOCATION, name+_CONF))
+		m.Trash(path.Join(ETC_CONF, UPSTREAM, name+_CONF))
 	}
 }
 func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
-	stats := map[string]int{}
-	conf, _ := s.parse(m, m.Config(nfs.PATH), m.Config(nfs.FILE), ice.Map{}, []string{}, stats)
+	conf, _, stats := s.parse(m, ETC_CONF, NGINX_CONF, ice.Map{}, []string{}, map[string]int{})
 	if len(arg) == 0 {
 		list := map[string]bool{}
 		m.Cmd(tcp.PORT, mdb.INPUTS, SERVER, func(value ice.Maps) { list[value[SERVER]] = true })
 		kit.For(kit.Value(conf, kit.Keys(HTTP, SERVER)), func(value ice.Map, index int) {
 			listen := kit.Split(kit.Format(value[LISTEN]))[0]
-			p := kit.Format(kit.Value(value, kit.Keys(LOCATION, nfs.PS, PROXY_PASS)))
-			server := kit.Format(kit.Value(conf, kit.Keys(HTTP, UPSTREAM, strings.TrimPrefix(p, "http://"), SERVER)))
+			proxy := kit.Format(kit.Value(value, kit.Keys(LOCATION, nfs.PS, PROXY_PASS)))
+			server := kit.Format(kit.Value(conf, kit.Keys(HTTP, UPSTREAM, strings.TrimPrefix(proxy, "http://"), SERVER)))
 			status := kit.Select(web.ONLINE, web.OFFLINE, !list[listen] || !list[server] && strings.HasPrefix(server, "127.0.0.1"))
 			stats[status]++
 			m.Push(mdb.ORDER, index).Push(mdb.NAME, kit.Format(value[SERVER_NAME])).Push(LISTEN, kit.Format(value[LISTEN]))
-			m.Push(PROXY_PASS, p).Push(SERVER, server).Push(mdb.STATUS, status)
+			m.Push(PROXY_PASS, proxy).Push(SERVER, server).Push(mdb.STATUS, status)
 			m.Push(nfs.FILE, kit.Value(value[nfs.FILE]))
 			m.PushButton(s.Open, s.Remove)
 		})
@@ -113,7 +99,7 @@ func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
 		})
 		m.StatusTimeCount(tcp.HOST, p)
 	} else {
-		m.EchoIFrame(p+arg[1]).StatusTimeCount(tcp.HOST, p+arg[1])
+		m.EchoIFrame(p+arg[1]).StatusTime(tcp.HOST, p+arg[1])
 	}
 	return m
 }
@@ -126,7 +112,7 @@ func init() { ice.CodeModCmd(configs{}) }
 func (s configs) host(m *ice.Message, host, port string) string {
 	return web.HostPort(m.Message, host, kit.Split(port)[0])
 }
-func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []string, stats map[string]int) (ice.Map, []string) {
+func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []string, stats map[string]int) (ice.Map, []string, map[string]int) {
 	m.Cmd(lex.SPLIT, dir+file, kit.Dict(lex.SPLIT_SPACE, "\t ;"), func(ls []string) {
 		switch ls[0] {
 		case INCLUDE:
@@ -136,7 +122,7 @@ func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []s
 			list, err := filepath.Glob(path.Join(dir, ls[1]))
 			m.Warn(err)
 			for _, file := range list {
-				conf, block = s.parse(m, dir, strings.TrimPrefix(file, dir), conf, block, stats)
+				conf, block, stats = s.parse(m, dir, strings.TrimPrefix(file, dir), conf, block, stats)
 			}
 		case HTTP, EVENTS, TYPES:
 			block = []string{ls[0]}
@@ -162,5 +148,5 @@ func (s configs) parse(m *ice.Message, dir, file string, conf ice.Map, block []s
 			kit.Value(conf, kit.Keys(block, ls[0]), strings.Join(ls[1:], lex.SP))
 		}
 	})
-	return conf, block
+	return conf, block, stats
 }
