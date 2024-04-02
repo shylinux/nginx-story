@@ -26,14 +26,6 @@
       "url": "/api/user/del"
     }
   },
-  "2bc521": {
-    "meta": {
-      "method": "GET",
-      "name": "runtime",
-      "time": "2024-03-29 18:56:38.452",
-      "url": "http://localhost:9020/c/runtime"
-    }
-  },
   "43bc62": {
     "meta": {
       "_target": [],
