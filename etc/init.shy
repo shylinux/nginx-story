@@ -1,5 +1,4 @@
 ~web
-	space icons "src/server/nginx.png"
 	space main desktop
 	serve main desktop
 ~web.code

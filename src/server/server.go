@@ -81,7 +81,9 @@ func (s server) Test(m *ice.Message, arg ...string) {
 func (s server) Error(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(cli.DIR), LOGS_ERROR_LOG))
 }
-func (s server) Reload(m *ice.Message, arg ...string) { s.cmds(m, arg...) }
+func (s server) Reload(m *ice.Message, arg ...string) {
+	s.cmds(m, arg...)
+}
 func (s server) Conf(m *ice.Message, arg ...string) {
 	m.Cmdy(nfs.CAT, path.Join(m.Option(nfs.DIR), CONF_NGINX_CONF)).ProcessInner()
 }

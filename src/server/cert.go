@@ -22,9 +22,6 @@ func (s cert) Upload(m *ice.Message, arg ...string) {
 func (s cert) Trash(m *ice.Message, arg ...string) {
 	m.Trash(path.Join(m.Config(nfs.PATH), m.Option(nfs.PATH)))
 }
-func (s cert) Show(m *ice.Message, arg ...string) {
-	m.Cmdy(nfs.CAT, path.Join(m.Config(nfs.PATH), m.Option(nfs.PATH))).ProcessInner()
-}
 func (s cert) List(m *ice.Message, arg ...string) {
 	if m.Options(nfs.DIR_ROOT, m.Config(nfs.PATH)).Cmdy(nfs.CAT, arg); len(arg) == 0 {
 		pem, key := false, false
@@ -38,6 +35,9 @@ func (s cert) List(m *ice.Message, arg ...string) {
 			m.EchoInfoButton("please upload cert key", s.Upload)
 		}
 	}
+}
+func (s cert) Show(m *ice.Message, arg ...string) {
+	m.Cmdy(nfs.CAT, path.Join(m.Config(nfs.PATH), m.Option(nfs.PATH))).ProcessInner()
 }
 
 func init() { ice.CodeModCmd(cert{}) }
