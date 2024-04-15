@@ -7,6 +7,6 @@ import (
 	_ "shylinux.com/x/nginx-story/src/studio"
 )
 
-func init() { ice.Info.NodeIcon = "src/server/nginx.png" }
-
 func main() { print(ice.Run()) }
+
+func init() { ice.Info.NodeIcon = "src/server/nginx.png" }
