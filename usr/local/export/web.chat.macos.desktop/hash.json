@@ -15,14 +15,6 @@
       "time": "2023-12-13 12:01:48.664"
     }
   },
-  "224f3f": {
-    "meta": {
-      "icon": "usr/icons/Grapher.png",
-      "index": "web.wiki.draw",
-      "name": "Grapher",
-      "time": "2023-12-13 12:01:48.537"
-    }
-  },
   "5a8bf7": {
     "meta": {
       "icon": "src/studio/studio.png",
@@ -47,6 +39,14 @@
       "time": "2024-01-11 00:20:46.029"
     }
   },
+  "9deb21": {
+    "meta": {
+      "icon": "usr/icons/Messages.png",
+      "index": "web.chat.message",
+      "name": "Messages",
+      "time": "2024-04-22 12:00:07.158"
+    }
+  },
   "c86b11": {
     "meta": {
       "icon": "usr/icons/Calendar.png",
@@ -61,14 +61,6 @@
       "index": "web.wiki.feel",
       "name": "Photos",
       "time": "2023-12-13 12:01:48.536"
-    }
-  },
-  "e70204": {
-    "meta": {
-      "icon": "usr/icons/Grapher.png",
-      "index": "web.wiki.draw",
-      "name": "Grapher",
-      "time": "2024-01-11 00:20:46.029"
     }
   },
   "f62b1c": {
