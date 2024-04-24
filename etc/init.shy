@@ -1,5 +1,3 @@
-~web
-	space main desktop
 ~web.code
 	binpack insert etc/conf/
 ~ssh
