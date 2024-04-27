@@ -11,7 +11,7 @@ import (
 
 type cert struct {
 	path string `data:"etc/conf/cert/"`
-	list string `name:"list path auto upload" help:"证书"`
+	list string `name:"list path auto upload"`
 }
 
 func (s cert) Upload(m *ice.Message, arg ...string) {

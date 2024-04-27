@@ -34,7 +34,7 @@ const (
 
 type configs struct {
 	create string `name:"create domain* https=yes,no upstream* server*"`
-	list   string `name:"list order path auto" help:"服务配置" icon:"nginx.png"`
+	list   string `name:"list order path auto" icon:"nginx.png"`
 }
 
 func (s configs) Inputs(m *ice.Message, arg ...string) {

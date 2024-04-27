@@ -29,16 +29,15 @@ type server struct {
 	action string `data:"test,error,reload,conf,change,rclocal"`
 	start  string `name:"start port*=10000"`
 	reload string `name:"reload" icon:"bi bi-bootstrap-reboot"`
-	conf   string `name:"conf"`
 	test   string `name:"test path*=/" icon:"bi bi-clipboard-check"`
-	error  string `name:"error" help:"错误" icon:"bi bi-calendar-week"`
-	list   string `name:"list port path auto" help:"服务器"`
+	error  string `name:"error" icon:"bi bi-calendar-week"`
 }
 
-func (s server) Init(m *ice.Message, arg ...string) {
-	code.PackageCreate(m.Message, nfs.SOURCE, NGINX, "", "", s.Link(m))
-}
+func (s server) Init(m *ice.Message, arg ...string) { m.PackageCreateSource("nginx") }
 func (s server) Install(m *ice.Message, arg ...string) {
+	if runtime.GOOS != cli.LINUX {
+		return
+	}
 	m.PushStream()
 	m.Cmd(cli.SYSTEM, cli.YUM, "install", "-y", NGINX)
 	m.Cmd(cli.SYSTEM, cli.MV, "/etc/nginx", "/etc/nginx.bak")
@@ -67,13 +66,10 @@ func (s server) Start(m *ice.Message, arg ...string) {
 		return []string{"-p", kit.Path(p), "-g", "daemon off;"}
 	})
 }
-
 func (s server) List(m *ice.Message, arg ...string) {
 	s.Code.List(m, "", arg...)
 	m.Action(s.Start, s.Build, s.Download, kit.Select("", code.INSTALL, runtime.GOOS == cli.LINUX))
-	if m.Length() > 0 {
-		m.EchoScript(m.Cmdx(nfs.CAT, nfs.ETC_LOCAL_SH))
-	}
+	kit.If(m.Length() > 0, func() { m.EchoScript(m.Cmdx(nfs.CAT, nfs.ETC_LOCAL_SH)) })
 }
 func (s server) Test(m *ice.Message, arg ...string) {
 	m.EchoIFrame(kit.Format("http://%s:%s", m.UserWeb().Hostname(), m.Option(tcp.PORT))).ProcessInner()

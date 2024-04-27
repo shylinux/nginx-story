@@ -5,6 +5,8 @@ section "编译安装"
 shell centos `
 yum install -y wget make gcc
 yum install -y pcre-devel.x86_64 zlib-devel.x86_64 openssl-devel.x86_64
+` darwin `
+
 `
 shell `
 wget http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz
