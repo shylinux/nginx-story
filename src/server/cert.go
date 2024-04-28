@@ -11,7 +11,7 @@ import (
 
 type cert struct {
 	path string `data:"etc/conf/cert/"`
-	list string `name:"list path auto upload"`
+	list string `name:"list path auto"`
 }
 
 func (s cert) Upload(m *ice.Message, arg ...string) {
@@ -33,11 +33,13 @@ func (s cert) List(m *ice.Message, arg ...string) {
 			m.EchoInfoButton("please upload cert pem", s.Upload)
 		} else if !key {
 			m.EchoInfoButton("please upload cert key", s.Upload)
+		} else {
+			m.Action(s.Upload)
 		}
 	}
 }
 func (s cert) Show(m *ice.Message, arg ...string) {
-	m.Cmdy(nfs.CAT, path.Join(m.Config(nfs.PATH), m.Option(nfs.PATH))).ProcessInner()
+	m.ProcessFloat(nfs.CAT, path.Join(m.Config(nfs.PATH), m.Option(nfs.PATH)), arg...)
 }
 
 func init() { ice.CodeModCmd(cert{}) }

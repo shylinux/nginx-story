@@ -1,12 +1,15 @@
-(function() { const REQUEST = "request", RESPONSE = "response"
+(function() {
+const REQUEST = "request", RESPONSE = "response"
 const METHOD = "method", PARAMS = "params", STATUS = "status", HEADER = "header", COOKIE = "cookie"
 const PLUGIN_STORY_EDITOR = "/plugin/story/editor.js"
 const PLUGIN_STORY_MONACO = "/plugin/story/monaco.js"
 const PLUGIN_STORY_JSON = "/plugin/story/json.js"
 Volcanos(chat.ONIMPORT, {
-	_init: function(can, msg) { can.ui = can.onappend.layout(can), can.onimport._project(can, msg) },
+	_init: function(can, msg) {
+		can.ui = can.onappend.layout(can), can.onimport._project(can, msg)
+	},
 	_project: function(can, msg) {
-		can.onimport.itemtabs(can, msg.Table(function(value) {
+		can.onimport.itemtabs(can, msg.Table(function(value) { value.type = value.method
 			value.nick = can.page.Format(html.SPAN, value.method == http.DELETE? "DEL": value.method, [METHOD, value.method])+lex.SP+can.page.Format(html.SPAN, value.name, mdb.NAME); return value
 		}), function(event, value) {
 			if (can.onmotion.cache(can, function(save, load) { save({msg: can.db.msg, action: can.ui.action, request: can.ui.request, response: can.ui.response, plugin: can.ui.content._plugin})
@@ -23,7 +26,17 @@ Volcanos(chat.ONIMPORT, {
 			], target) }},
 		])._target
 		can.ui.request = can.onimport._part(can, REQUEST, can.core.List([PARAMS, HEADER, COOKIE, aaa.AUTH, ctx.CONFIG], function(key) {
-			return {name: key, show: function(event, target) { can.onimport._table(can, target, value, key) }}
+			return {name: key, show: function(event, target) {
+				var table = can.onimport._table(can, target, value, key)
+				var action = can.page.Append(can, target, [html.ACTION])._target
+				can.onappend._action(can, ["addline"], action, {
+					"addline": function() {
+						can.page.Select(can, table, html.TBODY, function(target) {
+							can.page.Append(can, target, [{type: html.TR, list: [table._add("", mdb.NAME), table._add("", mdb.VALUE)]}])
+						})
+					},
+				})
+			}}
 		}), can.ui.content, [{type: html.BUTTON, value: nfs.SAVE}])
 		can.ui.response = can.onimport._part(can, RESPONSE, [{name: mdb.DATA, show: function(event, target) {
 			can.onimport._plugin(can, target)
@@ -61,7 +74,7 @@ Volcanos(chat.ONIMPORT, {
 					can.page.Append(can, table, [{type: html.TR, list: can.core.List(keys, function(key) { return add("", key) }) }])
 				}}, target, function(sub, value) {})
 			}}], target)
-		}, list: []} } var table = can.onappend.table(can, msg, add, target); return table
+		}, list: []} } var table = can.onappend.table(can, msg, add, target); table._add = add; return table
 	},
 	_response: function(can, target, msg, type) { var _msg = can.request()
 		msg.Table(function(value) { if (value.type == type) { _msg.Push(mdb.NAME, value.name), _msg.Push(mdb.VALUE, value.value) } })
@@ -91,12 +104,12 @@ Volcanos(chat.ONIMPORT, {
 				case http.ApplicationJSON: can.onappend._output(can, can.db.msg, PLUGIN_STORY_JSON, null, target, null, false); break
 				default: can.onappend.table(can, can.db.msg, null, target), can.onappend.board(can, can.db.msg, target)
 			}
-		} }) 
+		} })
 	},
-	layout: function(can) { can.ui.layout && can.ui.layout(can.ConfHeight(), can.ConfWidth()) },
-}, [""])
+})
 Volcanos(chat.ONACTION, {
-	save: function(event, can, button) { can.runAction(can.onexport.request(event, can), button, [], function(msg) { can.user.toastSuccess(can) }) },
+	save: function(event, can, button) { var msg = can.onexport.request(event, can)
+		can.runAction(msg, mdb.MODIFY, msg.OptionSimple(mdb.HASH, METHOD, "url", "params", "header", "cookie"), function(msg) { can.user.toastSuccess(can) }) },
 	request: function(event, can, button) { can.runAction(can.onexport.request(event, can), button, [], function(msg) {
 		delete(can.ui.response.content._cache), delete(can.ui.response.content._cache_key)
 		can.db.msg = msg, can.page.SelectOne(can, can.ui.response.action, "").click()

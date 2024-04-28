@@ -1,46 +1,45 @@
-fieldset.web.code.nginx.studio>div.output>div.project div.item:not(.text) { line-height:32px; }
+fieldset.web.code.nginx.studio>div.output>div.project div.item:not(.text) { line-height:var(--action-height); }
 fieldset.web.code.nginx.studio>div.output>div.project span.method { width:48px; display:inline-block; }
-
-
-/* fieldset.web.code.nginx.studio input { min-width:80px; } */
 fieldset.web.code.nginx.studio>div.output>div.layout>div.display:not(.select) { display:none; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.profile:not(.select) { display:none; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content { padding:20px; display:flex; flex-direction:column; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content { padding:var(--legend-padding); display:flex; flex-direction:column; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action { width:100%; display:flex; flex-shrink:0; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action input { border:var(--box-border); height:32px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action input { border:var(--box-border); height:var(--action-height); }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action input:focus { border:var(--box-notice); }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item { height:32px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item { height:var(--action-height); }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item.url { flex-grow:1; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.action>div.item.url>input { width:100%; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title { border-bottom:var(--box-border); display:flex; align-items:flex-end; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title>span { font-size:24px; font-style:italic; padding-bottom:5px; margin:0 20px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title input { border:var(--box-border); }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>fieldset.can.editor { margin-top:20px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request { margin-top:20px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.action { display:flex; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.action>div { text-align:center; padding:10px; min-width:80px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.action>div.select { border-bottom:var(--notice-bg-color) solid 2px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content col.name { width:230px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content col.description { width:320px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content th { border:var(--box-border); box-shadow:none; height:32px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td { padding:0; border:0; height:32px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title>span { font-size:var(--legend-font-size); padding-bottom:5px; margin-right:var(--input-margin); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.title input { border:none; background-color:transparent; color:var(--notice-bg-color); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.action { display:flex; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.action>div { text-align:center; padding:var(--legend-padding); min-width:80px; justify-content:center; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.action>div.select { border-bottom:var(--box-notice3); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.content col.name { width:var(--project-width); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.content th { border:var(--box-border); box-shadow:none; font-style:normal; height:var(--action-height); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.content>table td { border:0; padding:0; height:var(--action-height); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div>div.content>div.action input { border:0; background-color:transparent; color:var(--notice-bg-color); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request { margin-top:var(--legend-margin); min-height:240px; flex-shrink:0; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content { max-height:320px; overflow:auto; }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text { width:100%; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text span { font-size:26px; line-height:30px; padding:0 5px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td input { width:100%; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response { margin-top:20px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.action { display:flex; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.action>div { text-align:center; padding:10px; min-width:80px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.action>div.select { border-bottom:var(--notice-bg-color) solid 2px; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td div.item.text span { font-size:26px; padding:0 var(--input-padding); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.request>div.content>table td input { width:100%; margin-right:0; }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response { margin-top:var(--legend-margin); }
 fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content { white-space:pre; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content th { border:var(--box-border); box-shadow:none; height:32px; }
-fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content>table td { border:0; height:32px; }
-
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>div.response>div.content>table td { border:0; height:var(--action-height); }
+fieldset.web.code.nginx.studio>div.output>div.layout>div.layout>div.content>fieldset.can.editor { margin-top:var(--legend-margin); }
 body { --request-GET:green; --request-PUT:blue; --request-POST:gold; --request-DELETE:red; --request-DEL:red; }
 fieldset.web.code.nginx.studio span.GET { color:var(--request-GET); }
 fieldset.web.code.nginx.studio span.PUT { color:var(--request-PUT); }
 fieldset.web.code.nginx.studio span.POST { color:var(--request-POST); }
 fieldset.web.code.nginx.studio span.DELETE { color:var(--request-DELETE); }
 fieldset.web.code.nginx.studio span.DEL { color:var(--request-DEL); }
+fieldset.web.code.nginx.studio>div.action div.tabs.PUT { border-top-color:var(--request-DELETE); }
+fieldset.web.code.nginx.studio>div.action div.tabs.POST { border-top-color:var(--request-DELETE); }
+fieldset.web.code.nginx.studio>div.action div.tabs.DELETE { border-top-color:var(--request-DELETE); }
+fieldset.web.code.nginx.studio>div.output>div.project div.item.PUT { border-right-color:var(--request-DELETE); }
+fieldset.web.code.nginx.studio>div.output>div.project div.item.POST { border-right-color:var(--request-DELETE); }
+fieldset.web.code.nginx.studio>div.output>div.project div.item.DELETE { border-right-color:var(--request-DELETE); }
 fieldset.web.code.nginx.studio div.item.method input[value=GET] { color:var(--request-GET); }
 fieldset.web.code.nginx.studio div.item.method input[value=PUT] { color:var(--request-PUT); }
 fieldset.web.code.nginx.studio div.item.method input[value=POST] { color:var(--request-POST); }

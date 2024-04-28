@@ -1,0 +1,52 @@
+$project div.item:not(.text) { line-height:var(--action-height); }
+$project span.method { width:48px; display:inline-block; }
+$display:not(.select) { display:none; }
+$profile:not(.select) { display:none; }
+$content { padding:var(--legend-padding); display:flex; flex-direction:column; }
+$content>div.action { width:100%; display:flex; flex-shrink:0; }
+$content>div.action input { border:var(--box-border); height:var(--action-height); }
+$content>div.action input:focus { border:var(--box-notice); }
+$content>div.action>div.item { height:var(--action-height); }
+$content>div.action>div.item.url { flex-grow:1; }
+$content>div.action>div.item.url>input { width:100%; }
+$content>div>div.title { border-bottom:var(--box-border); display:flex; align-items:flex-end; }
+$content>div>div.title>span { font-size:var(--legend-font-size); padding-bottom:5px; margin-right:var(--input-margin); }
+$content>div>div.title input { border:none; background-color:transparent; color:var(--notice-bg-color); }
+$content>div>div.action { display:flex; }
+$content>div>div.action>div { text-align:center; padding:var(--button-padding); min-width:80px; justify-content:center; }
+$content>div>div.action>div.select { border-bottom:var(--box-notice3); }
+$content>div>div.content col.name { width:var(--project-width); }
+$content>div>div.content th { border:var(--box-border); box-shadow:none; font-style:normal; height:var(--action-height); }
+$content>div>div.content>table td { border:0; padding:0; height:var(--action-height); }
+$content>div>div.content>div.action input { border:0; background-color:transparent; color:var(--notice-bg-color); }
+$content>div.request { margin-top:var(--legend-margin); min-height:240px; flex-shrink:0; }
+$content>div.request>div.content { max-height:320px; overflow:auto; }
+$content>div.request>div.content>table td div.item.text { width:100%; }
+$content>div.request>div.content>table td div.item.text span { font-size:26px; padding:0 var(--input-padding); }
+$content>div.request>div.content>table td input { width:100%; margin-right:0; }
+$content>div.response { margin-top:var(--legend-margin); }
+$content>div.response>div.content { white-space:pre; }
+$content>div.response>div.content>table td { border:0; height:var(--action-height); }
+$content>fieldset.can.editor { margin-top:var(--legend-margin); }
+body { --request-GET:green; --request-PUT:blue; --request-POST:gold; --request-DELETE:red; --request-DEL:red; }
+$fieldset span.GET { color:var(--request-GET); }
+$fieldset span.PUT { color:var(--request-PUT); }
+$fieldset span.POST { color:var(--request-POST); }
+$fieldset span.DELETE { color:var(--request-DELETE); }
+$fieldset span.DEL { color:var(--request-DEL); }
+$fieldset>div.action div.tabs.PUT { border-top-color:var(--request-DELETE); }
+$fieldset>div.action div.tabs.POST { border-top-color:var(--request-DELETE); }
+$fieldset>div.action div.tabs.DELETE { border-top-color:var(--request-DELETE); }
+$fieldset>div.output>div.project div.item.PUT { border-right-color:var(--request-DELETE); }
+$fieldset>div.output>div.project div.item.POST { border-right-color:var(--request-DELETE); }
+$fieldset>div.output>div.project div.item.DELETE { border-right-color:var(--request-DELETE); }
+$fieldset div.item.method input[value=GET] { color:var(--request-GET); }
+$fieldset div.item.method input[value=PUT] { color:var(--request-PUT); }
+$fieldset div.item.method input[value=POST] { color:var(--request-POST); }
+$fieldset div.item.method input[value=DELETE] { color:var(--request-DELETE); }
+$fieldset div.item.method input[value=DEL] { color:var(--request-DEL); }
+div.carte.$index div.item.GET { color:var(--request-GET); }
+div.carte.$index div.item.PUT { color:var(--request-PUT); }
+div.carte.$index div.item.POST { color:var(--request-POST); }
+div.carte.$index div.item.DELETE { color:var(--request-DELETE); }
+div.carte.$index div.item.DEL { color:var(--request-DEL); }

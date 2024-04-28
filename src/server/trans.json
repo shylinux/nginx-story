@@ -1,4 +1,7 @@
 {
+	"server": "服务器",
+	"configs": "配置管理",
+	"cert": "证书管理",
 	"input": {
 		"listen": "监听",
 		"proxy_pass": "代理",

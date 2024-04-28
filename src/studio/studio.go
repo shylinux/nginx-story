@@ -27,12 +27,12 @@ const (
 )
 
 type studio struct {
-	ice.Code
 	ice.Hash
+	tools  string `data:"env"`
 	export string `data:"true"`
 	field  string `data:"time,hash,name,method,url,params,header,cookie,auth,config"`
 	create string `name:"create url* method* name*"`
-	list   string `name:"studio env@key list" help:"接口测试" icon:"studio.png"`
+	list   string `name:"studio env@key list" icon:"studio.png"`
 }
 
 func (s studio) Inputs(m *ice.Message, arg ...string) {
@@ -66,11 +66,8 @@ func (s studio) Inputs(m *ice.Message, arg ...string) {
 		}
 	}
 }
-func (s studio) Save(m *ice.Message, arg ...string) {
-	s.Hash.Modify(m, m.OptionSimple(mdb.HASH, METHOD, URL, PARAMS, HEADER, COOKIE, AUTH, CONFIG)...)
-}
 func (s studio) List(m *ice.Message, arg ...string) {
-	s.Hash.List(m).PushAction(s.Remove).Action(s.Create).Display("")
+	s.Hash.List(m).PushAction(s.Remove).Action(s.Create).Display("").DisplayCSS("studio1.css")
 }
 func (s studio) Request(m *ice.Message, arg ...string) {
 	args, header := []string{}, kit.UnMarshal(m.Option(HEADER))

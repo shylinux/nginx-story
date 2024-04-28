@@ -28,12 +28,14 @@ type server struct {
 	source string `data:"http://mirrors.tencent.com/macports/distfiles/nginx/nginx-1.19.1.tar.gz"`
 	action string `data:"test,error,reload,conf,change,rclocal"`
 	start  string `name:"start port*=10000"`
-	reload string `name:"reload" icon:"bi bi-bootstrap-reboot"`
 	test   string `name:"test path*=/" icon:"bi bi-clipboard-check"`
 	error  string `name:"error" icon:"bi bi-calendar-week"`
+	reload string `name:"reload" icon:"bi bi-bootstrap-reboot"`
 }
 
-func (s server) Init(m *ice.Message, arg ...string) { m.PackageCreateSource("nginx") }
+func (s server) Init(m *ice.Message, arg ...string) {
+	m.PackageCreateSource(NGINX)
+}
 func (s server) Install(m *ice.Message, arg ...string) {
 	if runtime.GOOS != cli.LINUX {
 		return
@@ -69,7 +71,7 @@ func (s server) Start(m *ice.Message, arg ...string) {
 func (s server) List(m *ice.Message, arg ...string) {
 	s.Code.List(m, "", arg...)
 	m.Action(s.Start, s.Build, s.Download, kit.Select("", code.INSTALL, runtime.GOOS == cli.LINUX))
-	kit.If(m.Length() > 0, func() { m.EchoScript(m.Cmdx(nfs.CAT, nfs.ETC_LOCAL_SH)) })
+	// kit.If(m.Length() > 0, func() { m.EchoScript(m.Cmdx(nfs.CAT, nfs.ETC_LOCAL_SH)) })
 }
 func (s server) Test(m *ice.Message, arg ...string) {
 	m.EchoIFrame(kit.Format("http://%s:%s", m.UserWeb().Hostname(), m.Option(tcp.PORT))).ProcessInner()
@@ -81,11 +83,10 @@ func (s server) Reload(m *ice.Message, arg ...string) {
 	s.cmds(m, arg...)
 }
 func (s server) Conf(m *ice.Message, arg ...string) {
-	m.Cmdy(nfs.CAT, path.Join(m.Option(nfs.DIR), CONF_NGINX_CONF)).ProcessInner()
+	m.ProcessFloat(nfs.CAT, path.Join(m.Option(nfs.DIR), CONF_NGINX_CONF), arg...)
 }
 func (s server) Change(m *ice.Message, arg ...string) {
-	p := path.Join(ice.USR_LOCAL_DAEMON, m.Option(tcp.PORT), "conf")
-	m.Trash(p)
+	p := m.Trash(path.Join(ice.USR_LOCAL_DAEMON, m.Option(tcp.PORT), "conf"))
 	m.Cmd(cli.SYSTEM, cli.LN, "-s", kit.Path(ETC_CONF), p)
 }
 func (s server) Rclocal(m *ice.Message, arg ...string) {
