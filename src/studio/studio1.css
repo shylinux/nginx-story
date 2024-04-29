@@ -30,6 +30,7 @@ $content>div.response>div.content>table td { border:0; height:var(--action-heigh
 $content>fieldset.can.editor { margin-top:var(--legend-margin); }
 body { --request-GET:green; --request-PUT:blue; --request-POST:gold; --request-DELETE:red; --request-DEL:red; }
 $fieldset span.GET { color:var(--request-GET); }
+$fieldset form.option div.item.env input { width:80px; }
 $fieldset span.PUT { color:var(--request-PUT); }
 $fieldset span.POST { color:var(--request-POST); }
 $fieldset span.DELETE { color:var(--request-DELETE); }
