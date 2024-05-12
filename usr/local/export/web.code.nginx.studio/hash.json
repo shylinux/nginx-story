@@ -26,6 +26,17 @@
       "url": "/api/user/del"
     }
   },
+  "35ccc2": {
+    "meta": {
+      "cookie": "{}",
+      "header": "{}",
+      "method": "GET",
+      "name": "dream",
+      "params": "{\"hi\":\"hello\"}",
+      "time": "2024-05-12 13:51:04.230",
+      "url": "/c/dream"
+    }
+  },
   "43bc62": {
     "meta": {
       "_target": [],
