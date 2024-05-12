@@ -5,27 +5,27 @@ const PLUGIN_STORY_EDITOR = "/plugin/story/editor.js"
 const PLUGIN_STORY_MONACO = "/plugin/story/monaco.js"
 const PLUGIN_STORY_JSON = "/plugin/story/json.js"
 Volcanos(chat.ONIMPORT, {
-	_init: function(can, msg) {
-		can.ui = can.onappend.layout(can), can.onimport._project(can, msg)
-	},
+	_init: function(can, msg) { can.ui = can.onappend.layout(can), can.onimport._project(can, msg) },
 	_project: function(can, msg) {
-		can.onimport.itemtabs(can, msg.Table(function(value) { value.type = value.method
-			value.nick = can.page.Format(html.SPAN, value.method == http.DELETE? "DEL": value.method, [METHOD, value.method])+lex.SP+can.page.Format(html.SPAN, value.name, mdb.NAME); return value
-		}), function(event, value) {
-			if (can.onmotion.cache(can, function(save, load) { save({msg: can.db.msg, action: can.ui.action, request: can.ui.request, response: can.ui.response, plugin: can.ui.content._plugin})
-				return load(value.hash, function(bak) { can.db.msg = bak.msg, can.ui.action = bak.action, can.ui.request = bak.request, can.ui.response = bak.response, can.ui.content._plugin = bak.plugin })
-			}, can.ui.content)) { return true } else { can.onimport._content(can, value) }
+		msg.Table(function(value) { value.type = value.method
+			value.nick = can.page.Format(html.SPAN, value.method == http.DELETE? "DEL": value.method, [METHOD, value.method])+lex.SP+can.page.Format(html.SPAN, value.name, mdb.NAME)
+			value._select = can.db.hash[0] == value.hash
+			can.onimport.item(can, value, function(event, value, show, target) {
+				show == undefined && can.onimport.tabsCache(can, can.request(event), value.hash, value, target, function() {
+					can.onimport._content(can, value)
+				})
+			})
 		})
 	},
-	_content: function(can, value) { can.db.msg = can.request()
-		can.ui.action = can.page.Append(can, can.ui.content, [
+	_content: function(can, value) { value._msg = can.request()
+		value._action = can.page.Append(can, can.ui.content, [
 			{view: html.ACTION, _init: function(target) { can.onappend._action(can, [
 				{type: html.SELECT, name: METHOD, value: value.method, values: [http.GET, http.PUT, http.POST, http.DELETE]},
 				{type: html.TEXT, name: web.URL, value: value.url, action: "key"},
 				{type: html.BUTTON, value: REQUEST, style: html.NOTICE},
 			], target) }},
 		])._target
-		can.ui.request = can.onimport._part(can, REQUEST, can.core.List([PARAMS, HEADER, COOKIE, aaa.AUTH, ctx.CONFIG], function(key) {
+		value._request = can.onimport._part(can, REQUEST, can.core.List([PARAMS, HEADER, COOKIE, aaa.AUTH, ctx.CONFIG], function(key) {
 			return {name: key, show: function(event, target) {
 				var table = can.onimport._table(can, target, value, key)
 				var action = can.page.Append(can, target, [html.ACTION])._target
@@ -38,10 +38,10 @@ Volcanos(chat.ONIMPORT, {
 				})
 			}}
 		}), can.ui.content, [{type: html.BUTTON, value: nfs.SAVE}])
-		can.ui.response = can.onimport._part(can, RESPONSE, [{name: mdb.DATA, show: function(event, target) {
+		value._response = can.onimport._part(can, RESPONSE, [{name: mdb.DATA, show: function(event, target) {
 			can.onimport._plugin(can, target)
 		}}].concat(can.core.List([STATUS, HEADER, COOKIE], function(key) {
-			return {name: key, show: function(event, target) { can.onimport._response(can, target, can.db.msg, key) }}
+			return {name: key, show: function(event, target) { can.onimport._response(can, target, can.db.value._msg, key) }}
 		})), can.ui.content, [{type: html.BUTTON, value: REQUEST, style: html.NOTICE}])
 	},
 	_part: function(can, name, list, target, action) {
@@ -81,7 +81,7 @@ Volcanos(chat.ONIMPORT, {
 		can.onappend.style(can, type, can.onappend.table(can, _msg, null, target))
 	},
 	_plugin: function(can, target) {
-		can.db.msg.Table(function(value) { if (value.name == http.ContentType) {
+		can.db.value._msg.Table(function(value) { if (value.name == http.ContentType) {
 			var config = can.onexport.config({}, can)
 			if (config.display) {
 				if (can.base.beginWith(config.profile, nfs.PS, web.HTTP)) {
@@ -94,15 +94,15 @@ Volcanos(chat.ONIMPORT, {
 				config.display = can.misc.Resource(can, config.display)
 				config.display = can.base.MergeURL(config.display, "_vv", new Date().getTime())
 				can.onappend.plugin(can, {
-					index: config.index, args: config.args, msg: can.db.msg, style: config.style, display: config.display, height: can.ConfHeight()/2-1,
+					index: config.index, args: config.args, msg: can.db.value._msg, style: config.style, display: config.display, height: can.ConfHeight()/2-1,
 				}, function(sub) { can.ui.content._plugin = sub
 					can.onmotion.hidden(can, sub._legend), can.onmotion.hidden(can, sub._option)
 				}, target)
 				return
 			}
 			switch (can.core.Split(value.value, ";")[0]) {
-				case http.ApplicationJSON: can.onappend._output(can, can.db.msg, PLUGIN_STORY_JSON, null, target, null, false); break
-				default: can.onappend.table(can, can.db.msg, null, target), can.onappend.board(can, can.db.msg, target)
+				case http.ApplicationJSON: can.onappend._output(can, can.db.value._msg, PLUGIN_STORY_JSON, null, target, null, false); break
+				default: can.onappend.table(can, can.db.value._msg, null, target), can.onappend.board(can, can.db.value._msg, target)
 			}
 		} })
 	},
@@ -111,22 +111,17 @@ Volcanos(chat.ONACTION, {
 	save: function(event, can, button) { var msg = can.onexport.request(event, can)
 		can.runAction(msg, mdb.MODIFY, msg.OptionSimple(mdb.HASH, METHOD, "url", "params", "header", "cookie"), function(msg) { can.user.toastSuccess(can) }) },
 	request: function(event, can, button) { can.runAction(can.onexport.request(event, can), button, [], function(msg) {
-		delete(can.ui.response.content._cache), delete(can.ui.response.content._cache_key)
-		can.db.msg = msg, can.page.SelectOne(can, can.ui.response.action, "").click()
-		if (msg.IsErr()) {
-			can.user.toastFailure(can, msg.Result())
-		} else {
-			can.user.toastSuccess(can)
-		}
+		delete(can.db.value._response.content._cache), delete(can.db.value._response.content._cache_key)
+		can.db.value._msg = msg, can.page.SelectOne(can, can.db.value._response.action, "").click()
 	}) },
 })
 Volcanos(chat.ONEXPORT, {
-	request: function(event, can) { var msg = can.request(event, can.db.current, can.Option())
-		can.page.Select(can, can.ui.action, "select[name=method]", function(target) { msg.Option(METHOD, target.value) })
-		can.page.Select(can, can.ui.action, "input[name=url]", function(target) { msg.Option("url", target.value) })
-		var _select = can.page.SelectOne(can, can.ui.request.action, html.DIV_ITEM_SELECT)
-		can.page.Select(can, can.ui.request.action, "", function(target) { var args = {}; target.click()
-			can.page.Select(can, can.ui.request.content, html.TR, function(tr, index) { if (index == 0) { return }
+	request: function(event, can) { var msg = can.request(event, can.db.value, can.Option())
+		can.page.Select(can, can.db.value._action, "select[name=method]", function(target) { msg.Option(METHOD, target.value) })
+		can.page.Select(can, can.db.value._action, "input[name=url]", function(target) { msg.Option("url", target.value) })
+		var _select = can.page.SelectOne(can, can.db.value._request.action, html.DIV_ITEM_SELECT)
+		can.page.Select(can, can.db.value._request.action, "", function(target) { var args = {}; target.click()
+			can.page.Select(can, can.db.value._request.content, html.TR, function(tr, index) { if (index == 0) { return }
 				var input = can.page.Select(can, tr, html.INPUT); input[0].value && (args[input[0].value] = input[1].value)
 			}), msg.Option(target._item.name, JSON.stringify(args))
 		}), _select.click(); return msg

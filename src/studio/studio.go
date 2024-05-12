@@ -67,7 +67,7 @@ func (s studio) Inputs(m *ice.Message, arg ...string) {
 	}
 }
 func (s studio) List(m *ice.Message, arg ...string) {
-	s.Hash.List(m).PushAction(s.Remove).Action(s.Create).Display("").DisplayCSS("studio1.css")
+	s.Hash.List(m).PushAction(s.Remove).Action(s.Create).Display("").DisplayCSS("")
 }
 func (s studio) Request(m *ice.Message, arg ...string) {
 	args, header := []string{}, kit.UnMarshal(m.Option(HEADER))
@@ -81,7 +81,7 @@ func (s studio) Request(m *ice.Message, arg ...string) {
 	kit.For(kit.UnMarshal(m.Option(PARAMS)), func(k, v string) { args = append(args, k, v) })
 	kit.For(kit.UnMarshal(m.Option(AUTH)), func(k, v string) { kit.Value(header, html.Authorization, k+lex.SP+v) })
 	m.Options(web.SPIDE_HEADER, header, web.SPIDE_COOKIE, kit.UnMarshal(m.Option(COOKIE)))
-	m.Cmdy(web.SPIDE, m.OptionDefault(ENV, ice.DEV), web.SPIDE_DETAIL, m.Option(METHOD), m.Option(URL), args).Render(ice.RENDER_RAW)
+	m.Cmdy(web.SPIDE, m.OptionDefault(ENV, ice.OPS), web.SPIDE_DETAIL, m.Option(METHOD), m.Option(URL), args).Render(ice.RENDER_RAW)
 }
 
 func init() { ice.CodeModCmd(studio{}) }
