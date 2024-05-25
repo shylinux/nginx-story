@@ -11,7 +11,7 @@ Volcanos(chat.ONIMPORT, {
 			value.nick = can.page.Format(html.SPAN, value.method == http.DELETE? "DEL": value.method, [METHOD, value.method])+lex.SP+can.page.Format(html.SPAN, value.name, mdb.NAME)
 			value._select = can.db.hash[0] == value.hash
 			can.onimport.item(can, value, function(event, value, show, target) {
-				show == undefined && can.onimport.tabsCache(can, can.request(event), value.hash, value, target, function() {
+				show == undefined && can.onimport.tabsCache(can, value, target, function() {
 					can.onimport._content(can, value)
 				})
 			})
