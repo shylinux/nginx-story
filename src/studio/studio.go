@@ -35,6 +35,11 @@ type studio struct {
 	list   string `name:"studio env@key list" icon:"studio.png"`
 }
 
+func (s studio) Init(m *ice.Message, arg ...string) {
+	web.AddPortalProduct(m.Message, "API Studio", `
+一款网页版的接口测试工作台，用来进行接口测试。
+`, 10.0)
+}
 func (s studio) Inputs(m *ice.Message, arg ...string) {
 	switch m.Option(ctx.ACTION) {
 	case ENV:
