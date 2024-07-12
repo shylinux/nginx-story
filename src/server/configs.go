@@ -33,6 +33,7 @@ const (
 )
 
 type configs struct {
+	tools  string `data:"xterm"`
 	create string `name:"create domain* https=yes,no upstream* server*"`
 	list   string `name:"list order path auto" icon:"nginx.png"`
 }
@@ -40,16 +41,27 @@ type configs struct {
 func (s configs) Inputs(m *ice.Message, arg ...string) {
 	switch arg[0] {
 	case web.DOMAIN:
+		m.AdminCmd(web.DREAM, web.SERVER).Table(func(value ice.Maps) {
+			m.Push(arg[0], kit.Keys(value[mdb.NAME], kit.Slice(kit.Split(m.UserWeb().Hostname(), nfs.PT), -2)))
+		})
 		m.Push(arg[0], m.UserWeb().Hostname())
 		m.Cmd(nfs.DIR, path.Join(ETC_CONF, SERVER), mdb.NAME, func(value ice.Maps) {
 			m.Push(arg[0], strings.TrimSuffix(value[mdb.NAME], _CONF))
 		})
 	case UPSTREAM:
+		m.AdminCmd(web.DREAM, web.SERVER).Table(func(value ice.Maps) {
+			m.Push(arg[0], value[mdb.NAME])
+		})
 		m.Push(arg[0], kit.Split(m.UserWeb().Hostname(), nfs.PT)[0])
 		m.Cmd(nfs.DIR, path.Join(ETC_CONF, UPSTREAM), mdb.NAME, func(value ice.Maps) {
 			m.Push(arg[0], strings.TrimSuffix(value[mdb.NAME], _CONF))
 		})
 	case SERVER:
+		m.AdminCmd(web.DREAM, web.SERVER).Table(func(value ice.Maps) {
+			if m.Option(UPSTREAM) == value[mdb.NAME] {
+				m.Push(arg[0], kit.Split(value[mdb.TEXT], ":")[0]+":9020")
+			}
+		})
 		m.Push(arg[0], "127.0.0.1:9020")
 		m.Cmdy(tcp.PORT, mdb.INPUTS, arg)
 	}
@@ -81,7 +93,7 @@ func (s configs) List(m *ice.Message, arg ...string) *ice.Message {
 			listen := kit.Split(kit.Format(value[LISTEN]))[0]
 			proxy := kit.Format(kit.Value(value, kit.Keys(LOCATION, nfs.PS, PROXY_PASS)))
 			server := kit.Format(kit.Value(conf, kit.Keys(HTTP, UPSTREAM, strings.TrimPrefix(proxy, "http://"), SERVER)))
-			status := kit.Select(web.ONLINE, web.OFFLINE, !list[listen] || !list[server] && strings.HasPrefix(server, "127.0.0.1"))
+			status := kit.Select(web.OFFLINE, web.ONLINE, list[listen] || list[server] || !strings.HasPrefix(server, "127.0.0.1"))
 			stats[status]++
 			m.Push(mdb.ORDER, index).Push(mdb.NAME, kit.Format(value[SERVER_NAME])).Push(LISTEN, kit.Format(value[LISTEN]))
 			m.Push(PROXY_PASS, proxy).Push(SERVER, server).Push(mdb.STATUS, status)

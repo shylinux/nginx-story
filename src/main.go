@@ -10,5 +10,5 @@ func main() { print(ice.Run()) }
 
 func init() {
 	ice.Info.NodeIcon = "src/server/nginx.png"
-	ice.Info.NodeMain = "web.code.nginx.studio"
+	ice.Info.NodeMain = "web.code.nginx.configs"
 }
