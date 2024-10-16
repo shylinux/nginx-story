@@ -2,10 +2,9 @@ package main
 
 import (
 	"shylinux.com/x/ice"
+	_ "shylinux.com/x/nginx-story/src/minio"
 	_ "shylinux.com/x/nginx-story/src/server"
 	_ "shylinux.com/x/nginx-story/src/studio"
-
-	_ "shylinux.com/x/nginx-story/src/minio"
 )
 
 func main() { print(ice.Run()) }
