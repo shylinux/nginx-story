@@ -10,5 +10,5 @@ require (
 
 require (
 	github.com/pkg/sftp v1.13.6 // indirect
-	golang.org/x/crypto v0.21.0 // indirect
+	golang.org/x/crypto v0.31.0 // indirect
 )
